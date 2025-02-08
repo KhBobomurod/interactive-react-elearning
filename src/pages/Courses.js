@@ -5,10 +5,18 @@ import { Link } from "react-router-dom";
 import react from "../img/React.jpg";
 import javascript from "../img/js.png";
 import soon from "../img/soon.png";
+// animation
+import { motion } from "framer-motion";
+import { pageAnimation } from "../animation";
 
 const Courses = () => {
   return (
-    <StyledCourses>
+    <StyledCourses
+      exit="exit"
+      variants={pageAnimation}
+      initial="hidden"
+      animate="show"
+    >
       <Course>
         <h2>Interaktiv React va Redux</h2>
         <div className="line"></div>
@@ -16,7 +24,7 @@ const Courses = () => {
           <img src={react} alt="react" />
         </Link>
       </Course>
-      <Course >
+      <Course>
         <h2>Tez kunda 😯</h2>
         <div className="line"></div>
         <Link to="/courses/soon">
@@ -33,7 +41,7 @@ const Courses = () => {
     </StyledCourses>
   );
 };
-const StyledCourses = styled.div`
+const StyledCourses = styled(motion.div)`
   min-height: 100vh;
   padding: 5rem 10rem;
   h2 {

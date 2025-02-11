@@ -47,6 +47,20 @@ const Benifets = styled(About)`
     clip-path: polygon(0% 10%, 100% 0%, 100% 91%, 0% 100%);
     border-left: 2px solid #30bee1;
   }
+  @media (max-width: 1300px) {
+    flex-direction: column;
+    img {
+      width: 100%;
+      height: 50vh;
+    }
+    h2 {
+      margin: 0rem 0rem 0rem 0rem;
+    }
+    h3 {
+      margin: 1rem 0rem 1rem 0rem;
+      width: 100%;
+    }
+  }
 `;
 
 export default BenifetsSection;

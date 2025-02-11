@@ -86,6 +86,12 @@ const Awards = styled.div`
   align-items: center;
   justify-content: space-around;
   margin: 5rem 10rem;
+  @media (max-width: 1300px) {
+    display: block;
+    margin: 2rem 0rem;
+    text-align: center;
+    padding: 2rem 2rem;
+  }
 `;
 // img display
 const ImageDisplay = styled.div`
@@ -93,6 +99,9 @@ const ImageDisplay = styled.div`
     width: 100%;
     height: 100vh;
     object-fit: cover;
+  }
+  @media (max-width: 1300px) {
+    padding: 2rem 2rem;
   }
 `;
 

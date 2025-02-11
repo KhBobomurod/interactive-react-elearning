@@ -56,6 +56,25 @@ const GlobalStyle = createGlobalStyle`
         font-size: 1.4rem;
         line-height: 150%;
     }
+    @media (max-width: 768px) {
+        h2{
+            font-size: 2.5rem;
+        }
+        h3{
+            font-size: 1.5rem;
+        }
+        h4{
+            font-size: 1.5rem;
+        }
+        p{
+            font-size: 1rem;
+        }
+        button{
+            font-size: 1rem;
+            padding: 1rem 2rem;
+            border: 2px solid #30bee1;
+        }
+    }
 
     `;
 

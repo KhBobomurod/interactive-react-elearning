@@ -47,6 +47,18 @@ const StyledCourses = styled(motion.div)`
   h2 {
     padding: 1rem 0rem;
   }
+@media (max-width: 1300px) {
+    display: block;
+    text-align: center;
+    padding: 2rem 2rem;
+    img {
+      margin: auto;
+      width: 100%;
+      height: 50vh;
+      background-position: center;
+      object-fit: cover;
+    }
+  }
 `;
 
 const Course = styled.div`

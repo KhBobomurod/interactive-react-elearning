@@ -78,6 +78,20 @@ const Header = styled.div`
     height: 70vh;
     object-fit: cover;
   }
+  @media (max-width: 1300px) {
+    min-height: 90vh;
+    padding-top: 30vh;
+    position: relative;
+    h2 {
+      font-size: 1.8rem;
+      position: absolute;
+    }
+    img {
+      width: 100%;
+      height: 50vh;
+      object-fit: cover;
+    }
+  }
 `;
 
 const Awards = styled.div`
@@ -88,8 +102,7 @@ const Awards = styled.div`
   margin: 5rem 10rem;
   @media (max-width: 1300px) {
     display: block;
-    margin: 2rem 0rem;
-    text-align: center;
+    margin: 2rem 2rem;
     padding: 2rem 2rem;
   }
 `;
@@ -102,6 +115,11 @@ const ImageDisplay = styled.div`
   }
   @media (max-width: 1300px) {
     padding: 2rem 2rem;
+    img {
+      width: 100%;
+      height: 70vh;
+      object-fit: cover;
+    }
   }
 `;
 
@@ -145,6 +163,15 @@ const StyledAward = styled.div`
     background: #30bee1;
     border: none;
     cursor: pointer;
+  }
+  @media (max-width: 1300px) {
+    padding: 1rem 1rem;
+    h3 {
+      font-size: 1.5rem;
+    }
+    h4 {
+      font-size: 1.2rem;
+    }
   }
 `;
 

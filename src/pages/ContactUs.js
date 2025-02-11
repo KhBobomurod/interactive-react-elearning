@@ -110,7 +110,7 @@ const Contact = () => {
               </a>
             </p>
             <p>
-              Phone: <a href="tel:+998935555555">+99888 144 17 00 </a>
+              Phone: <a href="tel:+998881441700">+99888 144 17 00 </a>
             </p>
           </motion.div>
         </Items>

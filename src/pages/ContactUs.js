@@ -76,7 +76,7 @@ const Contact = () => {
             <p>
               Email{" "}
               <a href="!#" target="_blank">
-                 press@e-learning.com
+                press@e-learning.com
               </a>
             </p>
           </motion.div>
@@ -86,18 +86,31 @@ const Contact = () => {
             <p>
               View{" "}
               <a href="!#" target="_blank">
-                 privacy policy
+                privacy policy
               </a>
             </p>
             <p>
-              Email{" "} 
+              Email{" "}
               <a href="!#" target="_blank">
-                 privacy@e-learning.com
+                privacy@e-learning.com
               </a>
             </p>
             <p>
               Mail: e-Learning, Inc. Attn: Privacy 1000 e-Learning Way, Mountain
               View, CA 94043
+            </p>
+          </motion.div>
+          <motion.div className="contact-item">
+            <h3>Contact us</h3>
+            <div className="line"></div>
+            <p>
+              Email{" "}
+              <a href="mailto: khudayberganovbobomurod@gmail.com">
+                contact@e-learning.com
+              </a>
+            </p>
+            <p>
+              Phone: <a href="tel:+998935555555">+99888 144 17 00 </a>
             </p>
           </motion.div>
         </Items>
@@ -125,7 +138,6 @@ const ContactStyle = styled(motion.div)`
     grid-gap: 2rem;
     grid-template-rows: 1fr;
     width: 100%;
-    
   }
   .contact-item {
     display: block;

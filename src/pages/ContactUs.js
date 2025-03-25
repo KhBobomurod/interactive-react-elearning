@@ -1,221 +1,250 @@
-import React from "react";
-// animation
-import { motion } from "framer-motion";
-import { pageAnimation } from "../animation";
+// src/pages/Contact.js
+import React, { useState } from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
+import { pageAnimation, fade, titleAnim } from "../animation";
+import emailjs from "@emailjs/browser"; // EmailJS’ni import qilamiz
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [success, setSuccess] = useState(""); // Muvaffaqiyat xabarini ko‘rsatish uchun
+  const [error, setError] = useState(""); // Xato xabarini ko‘rsatish uchun
+  const [loading, setLoading] = useState(false); // Yuklanish holati
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setSuccess("");
+    setError("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Tasdiqlash oynasi
+    const confirmSend = window.confirm("Xabarni yuborishni tasdiqlaysizmi?");
+    if (!confirmSend) return;
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    // EmailJS orqali xabar yuborish
+    emailjs
+    .send(
+      "service_q4qmgpy", // Service ID
+      "template_d4xsgla", // Template ID
+      {
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+      },
+      "oivxfAGIB_SFedgFO" // User ID
+    )
+      .then(
+        (result) => {
+          setSuccess("Xabar muvaffaqiyatli yuborildi!");
+          setFormData({ name: "", email: "", message: "" });
+          setLoading(false);
+        },
+        (error) => {
+          setError("Xabar yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.");
+          setLoading(false);
+        }
+      );
+  };
+
   return (
-    <motion.div
+    <StyledContact
       exit="exit"
       variants={pageAnimation}
       initial="hidden"
       animate="show"
     >
-      <ContactStyle className="contact">
-        <h1>Contact Us</h1>
-        <p>
-          The quickest way to get in touch with us is by using the contact
-          information below.
-        </p>
-        <p>
-          If you have any questions or concerns, please don't hesitate to
-          contact us. We look forward to hearing from you!
-        </p>
-        <Items>
-          <motion.div className="contact-item">
-            <h3>Learners</h3>
-            <div className="line"></div>
-            <p>
-              Visit our{" "}
-              <a href="!#" target="_blank">
-                Help Center
-              </a>{" "}
-            </p>
-            <p>
-              <a href="!#" target="_blank">
-                How to reach our support team
-              </a>
-            </p>
-          </motion.div>
-          <motion.div className="contact-item">
-            <h3>e-Learning Business</h3>
-            <div className="line"></div>
-            <p>
-              Visit our{" "}
-              <a href="!#" target="_blank">
-                Help Center
-              </a>
-            </p>
-            <p>
-              Enterprise{" "}
-              <a href="!#" target="_blank">
-                New Customer Inquiry
-              </a>
-            </p>
-          </motion.div>
-          <motion.div className="contact-item">
-            <h3>Partners</h3>
-            <div className="line"></div>
-            <p>
-              Visit our{" "}
-              <a href="!#" target="_blank">
-                Help Center
-              </a>
-            </p>
-          </motion.div>
-          <motion.div className="contact-item">
-            <h3>Press</h3>
-            <div className="line"></div>
-            <p>
-              View{" "}
-              <a href="!#" target="_blank">
-                general information
-              </a>
-            </p>
-            <p>
-              Email{" "}
-              <a href="!#" target="_blank">
-                press@e-learning.com
-              </a>
-            </p>
-          </motion.div>
-          <motion.div className="contact-item">
-            <h3>Privacy</h3>
-            <div className="line"></div>
-            <p>
-              View{" "}
-              <a href="!#" target="_blank">
-                privacy policy
-              </a>
-            </p>
-            <p>
-              Email{" "}
-              <a href="!#" target="_blank">
-                privacy@e-learning.com
-              </a>
-            </p>
-            <p>
-              Mail: e-Learning, Inc. Attn: Privacy 1000 e-Learning Way, Mountain
-              View, CA 94043
-            </p>
-          </motion.div>
-          <motion.div className="contact-item">
-            <h3>Contact us</h3>
-            <div className="line"></div>
-            <p>
-              Email{" "}
-              <a href="mailto: khudayberganovbobomurod@gmail.com">
-                contact@e-learning.com
-              </a>
-            </p>
-            <p>
-              Phone: <a href="tel:+998881441700">+99888 144 17 00 </a>
-            </p>
-          </motion.div>
-        </Items>
-      </ContactStyle>
-    </motion.div>
+      <motion.h2 variants={titleAnim}>Contact Us</motion.h2>
+      <motion.p variants={fade}>
+        Have any questions? Feel free to reach out to us!
+      </motion.p>
+      {success && <SuccessMessage variants={fade}>{success}</SuccessMessage>}
+      {error && <ErrorMessage variants={fade}>{error}</ErrorMessage>}
+      <Form onSubmit={handleSubmit}>
+        <motion.div variants={fade}>
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Your Name"
+            required
+          />
+        </motion.div>
+        <motion.div variants={fade}>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Your Email"
+            required
+          />
+        </motion.div>
+        <motion.div variants={fade}>
+          <label htmlFor="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Your Message"
+            required
+          />
+        </motion.div>
+        <motion.button type="submit" variants={fade} disabled={loading}>
+          {loading ? "Sending..." : "Send Message"}
+        </motion.button>
+      </Form>
+    </StyledContact>
   );
 };
 
-// motion.div style
-const ContactStyle = styled(motion.div)`
-  padding: 2rem 5rem;
-  color: #ccc;
-  h1 {
-    padding: 1rem 0rem;
+const StyledContact = styled(motion.div)`
+  padding: 5rem 10rem;
+  background: #1b1b1b;
+  color: #fff;
+  min-height: 100vh;
+  h2 {
+    font-weight: lighter;
     font-size: 3rem;
     text-align: center;
+    margin-bottom: 2rem;
   }
   p {
-    padding: 1rem 0rem;
     text-align: center;
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 3rem;
   }
-  .contact {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 2rem;
-    grid-template-rows: 1fr;
+`;
+
+const Form = styled.form`
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  label {
+    font-size: 1.1rem;
+    color: #ccc;
+  }
+  input,
+  textarea {
     width: 100%;
-  }
-  .contact-item {
-    display: block;
-    flex: 1;
-    width: 30%;
-    background: #333;
-    padding: 2rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 2px solid #30bee1;
     border-radius: 0.5rem;
-    margin: 0rem 1rem;
-    h3 {
-      padding: 1rem 0rem;
-      font-size: 2rem;
-    }
-    p {
-      padding: 1rem 0rem;
-    }
-    a {
-      color: #30bee1;
-    }
-    .line {
-      width: 100%;
-      background: #30bee1;
-      height: 0.3rem;
-      margin: 1rem 0rem;
+    background: #333;
+    color: #fff;
+    outline: none;
+    &:focus {
+      border-color: #1a9cbf;
     }
   }
-  @media (max-width: 1300px) {
-    padding: 2rem 2rem;
-    .contact {
-      display: block;
-    }
-    .contact-item {
-      width: 100%;
-      margin: 2rem 0rem;
-    }
-    h1 {
-      font-size: 2rem;
-    }
-    p {
-      font-size: 1rem;
-    }
-    .contact-item h3 {
-      font-size: 1.2rem;
-    }
-    .contact-item p {
-      font-size: 1rem;
-    }
-    .contact-item a {
-      font-size: 1rem;
+  textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+  button {
+    align-self: center;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    background: #30bee1;
+    border: none;
+    border-radius: 0.5rem;
+    color: #fff;
+    cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
+    opacity: ${props => (props.disabled ? 0.6 : 1)};
+    transition: background 0.3s ease;
+    &:hover:not(:disabled) {
+      background: #1a9cbf;
     }
   }
 `;
 
-const Items = styled.div`
-  width: 100%;
-  padding: 2rem;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin: 2rem;
+const SuccessMessage = styled(motion.p)`
+  color: #55ff55;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+`;
+
+const ErrorMessage = styled(motion.p)`
+  color: #ff5555;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+`;
+
+const mediaQueries = `
   @media (max-width: 1300px) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 2rem;
-    grid-template-rows: auto;
-    width: 100%;
-    margin: 2rem 0rem;
+    ${StyledContact} {
+      padding: 3rem 5rem;
+    }
+    h2 {
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1.1rem;
+    }
   }
   @media (max-width: 768px) {
-    display: block;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    .contact-item {
+    ${StyledContact} {
+      padding: 2rem 3rem;
+    }
+    h2 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+    input,
+    textarea {
+      font-size: 0.9rem;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.7rem 1.5rem;
+    }
+  }
+  @media (max-width: 480px) {
+    ${StyledContact} {
+      padding: 1.5rem 1rem;
+    }
+    h2 {
+      font-size: 1.8rem;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+    input,
+    textarea {
+      font-size: 0.85rem;
+    }
+    button {
+      font-size: 0.9rem;
+      padding: 0.6rem 1.2rem;
       width: 100%;
-      margin: 2rem 0rem;
     }
   }
 `;
+
+Form.style = mediaQueries;
 
 export default Contact;

@@ -7,6 +7,7 @@ import Nav from "./components/Nav";
 import Courses from "./pages/Courses";
 import ContactUS from "./pages/ContactUs";
 import CourseDetail from "./pages/CourseDetail";
+import AdminPanel from "./pages/AdminPanel"; // Admin panelni import qilamiz
 // React Router
 import { Switch, Route, useLocation } from "react-router-dom";
 // framer motion
@@ -32,6 +33,9 @@ function App() {
           </Route>
           <Route path="/contact">
             <ContactUS />
+          </Route>
+          <Route path="/admin">
+            <AdminPanel />
           </Route>
         </Switch>
       </AnimatePresence>

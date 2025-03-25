@@ -3,13 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "ace-builds": "^1.39.1",
     "cra-template": "1.2.0",
     "framer-motion": "^12.4.1",
     "react": "^19.0.0",
+    "react-ace": "^14.0.1",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.15.1",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
+    "redux": "^5.0.1",
     "styled-components": "^6.1.14"
   },
   "scripts": {

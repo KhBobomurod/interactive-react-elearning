@@ -1,15 +1,15 @@
 // src/CourseState.js
 import react from "./img/react1.jpg";
 import react2 from "./img/react2jpg.jpg";
-import js from "./img/js.png"; // JavaScript kursi uchun rasm
+import js from "./img/js.png";
 import js2 from "./img/js2.jpg";
-import node from "./img/node.png"; // Node.js kursi uchun rasm
+import node from "./img/node.png";
 import node2 from "./img/node2.jpg";
 
 export const CourseState = [
-  // 1. Interaktiv React va Redux (oldin mavjud edi)
+  // 1. Interaktiv React va Redux
   {
-    title: "Interaktiv React va Redux",
+    title: "React va Redux",
     mainImg: react,
     url: "/courses/react",
     secondaryImg: react2,
@@ -355,7 +355,7 @@ export const CourseState = [
 
   // 3. Node.js va Backend Dasturlash
   {
-    title: "Node.js va Backend Dasturlash",
+    title: "Node.js va Backend",
     mainImg: node,
     url: "/courses/nodejs",
     secondaryImg: node2,

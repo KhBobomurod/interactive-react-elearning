@@ -63,7 +63,11 @@ const CourseDetail = () => {
 
           {/* Kurs haqida ma’lumot bo‘limi */}
           {!showLessons && (
-            <CourseOverview>
+            <CourseOverview
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <Banner>
                 <img src={course.secondaryImg} alt="course-banner" />
                 <BannerTitle>Kursga xush kelibsiz!</BannerTitle>
@@ -91,6 +95,17 @@ const CourseDetail = () => {
                   {course.overview.prerequisites}
                 </p>
               </div>
+              <Awards>
+                {course.awards.map((award) => (
+                  <Award
+                    key={award.title}
+                    title={award.title}
+                    description={award.description}
+                    definition={award.definition}
+                    price={award.price}
+                  />
+                ))}
+              </Awards>
               <button onClick={() => setShowLessons(true)}>
                 Darslarni boshlash
               </button>
@@ -100,7 +115,11 @@ const CourseDetail = () => {
           {/* Darslar bo‘limi */}
           {showLessons && (
             <>
-              <Lessons>
+              <Lessons
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
                 <h3>
                   Dars {currentLesson + 1}:{" "}
                   {course.lessons[currentLesson].title}
@@ -172,7 +191,7 @@ const Lesson = ({ title, video, text, tasks, duration }) => {
       <div className="video">
         <iframe
           width="100%"
-          height="500"
+          height="100%"
           src={video.replace("watch?v=", "embed/")}
           title={title}
           frameBorder="0"
@@ -224,76 +243,101 @@ const Lesson = ({ title, video, text, tasks, duration }) => {
   );
 };
 
+// Award komponenti
+const Award = ({ title, description, definition, price }) => {
+  return (
+    <StyledAward>
+      <h3>{title}</h3>
+      <div className="line"></div>
+      <p>{description}</p>
+      <h4>{definition}</h4>
+      <p>
+        <strong>Narxi:</strong> {price}
+      </p>
+    </StyledAward>
+  );
+};
+
 // Styled Components
 const Details = styled(motion.div)`
   color: #fff;
+  background: #1b1b1b;
+  min-height: 100vh;
 `;
 
 const Header = styled.div`
-  min-height: 90vh;
-  padding-top: 20vh;
+  min-height: 60vh;
+  padding-top: 15vh;
   position: relative;
   h2 {
     position: absolute;
-    top: 10%;
+    top: 5%;
     left: 50%;
-    transform: translate(-50%, -10%);
+    transform: translateX(-50%);
     font-size: 3rem;
     text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
   img {
     width: 100%;
-    height: 70vh;
+    height: 50vh;
     object-fit: cover;
   }
   @media (max-width: 1300px) {
-    padding-top: 30vh;
-    h2 {
-      font-size: 2.5rem;
-    }
-    img {
-      height: 50vh;
-    }
-  }
-  @media (max-width: 768px) {
-    padding-top: 20vh;
+    min-height: 50vh;
+    padding-top: 10vh;
     h2 {
       font-size: 2rem;
-      top: 15%;
+      top: 8%;
     }
     img {
       height: 40vh;
     }
   }
-  @media (max-width: 480px) {
-    padding-top: 15vh;
+  @media (max-width: 768px) {
+    min-height: 40vh;
+    padding-top: 8vh;
     h2 {
-      font-size: 1.5rem;
-      top: 10%;
+      font-size: 1.8rem;
+      top: 5%;
     }
     img {
       height: 30vh;
     }
   }
+  @media (max-width: 480px) {
+    min-height: 35vh;
+    padding-top: 5vh;
+    h2 {
+      font-size: 1.5rem;
+      top: 3%;
+      margin-bottom: 1rem;
+    }
+    img {
+      margin-top: 1rem;
+      height: 25vh;
+    }
+  }
 `;
 
-const CourseOverview = styled.div`
-  padding: 5rem 10rem;
+const CourseOverview = styled(motion.div)`
+  padding: 3rem 5rem;
   background: #222;
   border-radius: 0.5rem;
-  margin: 2rem 0;
+  margin: 1rem 0;
   h3 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 1rem;
   }
   p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 1rem;
   }
   .overview-details {
-    margin: 2rem 0;
+    margin: 1.5rem 0;
     p {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin: 0.5rem 0;
       display: flex;
       align-items: center;
@@ -304,12 +348,12 @@ const CourseOverview = styled.div`
     }
   }
   button {
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.5rem;
     background: #30bee1;
     border: none;
     cursor: pointer;
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border-radius: 0.3rem;
     transition: background 0.3s ease;
     &:hover {
@@ -317,21 +361,6 @@ const CourseOverview = styled.div`
     }
   }
   @media (max-width: 1300px) {
-    padding: 3rem 5rem;
-    h3 {
-      font-size: 2rem;
-    }
-    p {
-      font-size: 1.1rem;
-    }
-    .overview-details p {
-      font-size: 1.1rem;
-    }
-    button {
-      font-size: 1.1rem;
-    }
-  }
-  @media (max-width: 768px) {
     padding: 2rem 3rem;
     h3 {
       font-size: 1.8rem;
@@ -344,13 +373,12 @@ const CourseOverview = styled.div`
     }
     button {
       font-size: 1rem;
-      padding: 0.8rem 1.5rem;
     }
   }
-  @media (max-width: 480px) {
-    padding: 1.5rem 1rem;
+  @media (max-width: 768px) {
+    padding: 1.5rem 2rem;
     h3 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
     }
     p {
       font-size: 0.9rem;
@@ -361,6 +389,22 @@ const CourseOverview = styled.div`
     button {
       font-size: 0.9rem;
       padding: 0.7rem 1.2rem;
+    }
+  }
+  @media (max-width: 480px) {
+    padding: 1rem 1rem;
+    h3 {
+      font-size: 1.4rem;
+    }
+    p {
+      font-size: 0.85rem;
+    }
+    .overview-details p {
+      font-size: 0.85rem;
+    }
+    button {
+      font-size: 0.85rem;
+      padding: 0.6rem 1rem;
       width: 100%;
     }
   }
@@ -368,26 +412,26 @@ const CourseOverview = styled.div`
 
 const Banner = styled.div`
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   img {
     width: 100%;
-    height: 30vh;
+    height: 25vh;
     object-fit: cover;
     border-radius: 0.5rem;
   }
   @media (max-width: 1300px) {
     img {
-      height: 25vh;
+      height: 20vh;
     }
   }
   @media (max-width: 768px) {
     img {
-      height: 20vh;
+      height: 15vh;
     }
   }
   @media (max-width: 480px) {
     img {
-      height: 15vh;
+      height: 12vh;
     }
   }
 `;
@@ -397,64 +441,148 @@ const BannerTitle = styled.h4`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #fff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   @media (max-width: 1300px) {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   @media (max-width: 768px) {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   @media (max-width: 480px) {
     font-size: 1.2rem;
   }
 `;
 
-const Lessons = styled.div`
-  padding: 5rem 10rem;
+const Awards = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+`;
+
+const StyledAward = styled.div`
+  padding: 1.5rem;
+  background: #333;
+  border-radius: 0.5rem;
+  width: 30%;
+  text-align: center;
   h3 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+  .line {
+    width: 50%;
+    background: #30bee1;
+    height: 0.3rem;
+    margin: 0.5rem auto;
+  }
+  p {
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+  }
+  h4 {
+    font-size: 1.1rem;
+    color: #30bee1;
+    margin: 0.5rem 0;
   }
   @media (max-width: 1300px) {
-    padding: 3rem 5rem;
+    width: 32%;
+    padding: 1.2rem;
     h3 {
-      font-size: 2rem;
+      font-size: 1.3rem;
+    }
+    p {
+      font-size: 0.85rem;
+    }
+    h4 {
+      font-size: 1rem;
     }
   }
   @media (max-width: 768px) {
+    width: 100%;
+    padding: 1rem;
+    h3 {
+      font-size: 1.2rem;
+    }
+    p {
+      font-size: 0.8rem;
+    }
+    h4 {
+      font-size: 0.9rem;
+    }
+  }
+  @media (max-width: 480px) {
+    padding: 0.8rem;
+    h3 {
+      font-size: 1.1rem;
+    }
+    p {
+      font-size: 0.75rem;
+    }
+    h4 {
+      font-size: 0.85rem;
+    }
+  }
+`;
+
+const Lessons = styled(motion.div)`
+  padding: 3rem 5rem;
+  h3 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 1300px) {
     padding: 2rem 3rem;
     h3 {
       font-size: 1.8rem;
     }
   }
-  @media (max-width: 480px) {
-    padding: 1.5rem 1rem;
+  @media (max-width: 768px) {
+    padding: 1.5rem 2rem;
     h3 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
+    }
+  }
+  @media (max-width: 480px) {
+    padding: 1rem 1rem;
+    h3 {
+      font-size: 1.4rem;
     }
   }
 `;
 
 const StyledLesson = styled.div`
-  margin: 2rem 0;
-  padding: 2rem;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
   background: #333;
   border-radius: 0.5rem;
   h4 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
   }
   p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin: 0.5rem 0;
   }
   .video {
     margin: 1rem 0;
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
     iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 200px;
+      height: 100%;
+      border-radius: 0.5rem;
     }
   }
   .text {
@@ -463,14 +591,14 @@ const StyledLesson = styled.div`
   .tasks {
     margin-top: 1rem;
     h5 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
     }
     input {
       width: 100%;
       padding: 0.5rem;
       margin: 0.5rem 0;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
     button {
       margin: 0.5rem 0;
@@ -479,28 +607,25 @@ const StyledLesson = styled.div`
       border: none;
       cursor: pointer;
       color: #fff;
-      font-size: 1rem;
+      font-size: 0.9rem;
       border-radius: 0.3rem;
     }
   }
   @media (max-width: 1300px) {
-    padding: 1.5rem;
+    padding: 1.2rem;
     h4 {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
     }
     p {
-      font-size: 1.1rem;
-    }
-    .video iframe {
-      height: 180px;
+      font-size: 1rem;
     }
     .tasks {
       h5 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
       }
       input,
       button {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
     }
   }
@@ -510,18 +635,15 @@ const StyledLesson = styled.div`
       font-size: 1.4rem;
     }
     p {
-      font-size: 1rem;
-    }
-    .video iframe {
-      height: 150px;
+      font-size: 0.9rem;
     }
     .tasks {
       h5 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
       }
       input,
       button {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
       }
     }
   }
@@ -531,18 +653,15 @@ const StyledLesson = styled.div`
       font-size: 1.2rem;
     }
     p {
-      font-size: 0.9rem;
-    }
-    .video iframe {
-      height: 120px;
+      font-size: 0.85rem;
     }
     .tasks {
       h5 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
       }
       input,
       button {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         padding: 0.4rem 0.8rem;
       }
     }
@@ -555,28 +674,19 @@ const Progress = styled.div`
   flex-direction: column;
   align-items: center;
   button {
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.5rem;
     background: #30bee1;
     border: none;
     cursor: pointer;
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border-radius: 0.3rem;
   }
   p {
-    margin-top: 1rem;
-    font-size: 1.2rem;
+    margin-top: 0.8rem;
+    font-size: 1.1rem;
   }
   @media (max-width: 1300px) {
-    button {
-      font-size: 1.1rem;
-      padding: 0.8rem 1.5rem;
-    }
-    p {
-      font-size: 1.1rem;
-    }
-  }
-  @media (max-width: 768px) {
     button {
       font-size: 1rem;
       padding: 0.7rem 1.2rem;
@@ -585,29 +695,39 @@ const Progress = styled.div`
       font-size: 1rem;
     }
   }
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     button {
       font-size: 0.9rem;
       padding: 0.6rem 1rem;
-      width: 100%;
     }
     p {
       font-size: 0.9rem;
     }
   }
+  @media (max-width: 480px) {
+    button {
+      font-size: 0.85rem;
+      padding: 0.5rem 0.8rem;
+      width: 100%;
+    }
+    p {
+      font-size: 0.85rem;
+    }
+  }
 `;
 
 const Navigation = styled.div`
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
   button {
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.5rem;
     background: #30bee1;
     border: none;
     cursor: pointer;
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border-radius: 0.3rem;
     &:disabled {
       background: #ccc;
@@ -616,23 +736,23 @@ const Navigation = styled.div`
   }
   @media (max-width: 1300px) {
     button {
-      font-size: 1.1rem;
-      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      padding: 0.7rem 1.2rem;
     }
   }
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.8rem;
     button {
-      font-size: 1rem;
-      padding: 0.7rem 1.2rem;
+      font-size: 0.9rem;
+      padding: 0.6rem 1rem;
       width: 100%;
     }
   }
   @media (max-width: 480px) {
     button {
-      font-size: 0.9rem;
-      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      padding: 0.5rem 0.8rem;
     }
   }
 `;
@@ -640,26 +760,24 @@ const Navigation = styled.div`
 const ImageDisplay = styled.div`
   img {
     width: 100%;
-    height: 100vh;
+    height: 80vh;
     object-fit: cover;
   }
   @media (max-width: 1300px) {
     img {
-      height: 70vh;
+      height: 60vh;
     }
   }
   @media (max-width: 768px) {
     img {
-      height: 50vh;
+      height: 40vh;
     }
   }
   @media (max-width: 480px) {
     img {
-      height: 40vh;
+      height: 30vh;
     }
   }
 `;
-
-
 
 export default CourseDetail;

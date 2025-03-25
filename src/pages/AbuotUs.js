@@ -1,15 +1,15 @@
+// src/pages/AboutUs.js
 import React from "react";
-// import components
 import AboutSection from "../components/AboutSection";
 import BenefitsSection from "../components/BenefitsSection";
 import FaqSection from "../components/FaqSection";
-// animation
 import { motion } from "framer-motion";
 import { pageAnimation } from "../animation";
+import styled from "styled-components";
 
 const AboutUs = () => {
   return (
-    <motion.div
+    <StyledAboutUs
       exit="exit"
       variants={pageAnimation}
       initial="hidden"
@@ -18,8 +18,14 @@ const AboutUs = () => {
       <AboutSection />
       <BenefitsSection />
       <FaqSection />
-    </motion.div>
+    </StyledAboutUs>
   );
 };
+
+const StyledAboutUs = styled(motion.div)`
+  background: #1b1b1b;
+  /* min-height: 100vh; - Bu qator olib tashlandi */
+  padding-bottom: 2rem; /* Oxirgi bo‘limdan keyin minimal bo‘sh joy */
+`;
 
 export default AboutUs;

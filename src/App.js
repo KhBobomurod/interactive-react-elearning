@@ -1,11 +1,11 @@
 import React from "react";
 // import pages
-import AboutUs from "./pages/AbuotUs";
+import AboutUs from "./pages/AboutUs";
 // import GlobalStyle
 import GlobalStyle from "./components/GlobalStyle";
 import Nav from "./components/Nav";
 import Courses from "./pages/Courses";
-import ContactUS from "./pages/ContactUs";
+import ContactUs from "./pages/ContactUs";
 import CourseDetail from "./pages/CourseDetail";
 import AdminPanel from "./pages/AdminPanel"; // Admin panelni import qilamiz
 // React Router
@@ -32,7 +32,7 @@ function App() {
             <CourseDetail />
           </Route>
           <Route path="/contact">
-            <ContactUS />
+            <ContactUs />
           </Route>
           <Route path="/admin">
             <AdminPanel />

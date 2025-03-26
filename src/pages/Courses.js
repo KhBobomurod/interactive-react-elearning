@@ -1,14 +1,11 @@
-// src/pages/Courses.js
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-// Rasmlar
-import react from "../img/react1.jpg";
-import javascript from "../img/js2.jpg"; // JavaScript uchun mos rasm
-import node from "../img/node2.jpg"; // Node.js uchun mos rasm
-// Animatsiya
 import { motion } from "framer-motion";
 import { pageAnimation, fade, photoAnim } from "../animation";
+import { CourseState } from "../CourseState";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Courses = () => {
   return (
@@ -18,38 +15,23 @@ const Courses = () => {
       initial="hidden"
       animate="show"
     >
-      <Course variants={fade}>
-        <motion.div className="card-content" variants={fade}>
-          <h2>Interaktiv React va Redux</h2>
-          <p>
-            React va Redux yordamida zamonaviy veb-ilovalarni qurishni
-            o‘rganing.
-          </p>
-        </motion.div>
-        <Link to="/courses/react">
-          <motion.img variants={photoAnim} src={react} alt="react" />
-        </Link>
-      </Course>
-      <Course variants={fade}>
-        <motion.div className="card-content" variants={fade}>
-          <h2>JavaScript Asoslari</h2>
-          <p>
-            JavaScriptning asoslarini o‘rganing va oddiy loyihalar yarating.
-          </p>
-        </motion.div>
-        <Link to="/courses/javascript">
-          <motion.img variants={photoAnim} src={javascript} alt="javascript" />
-        </Link>
-      </Course>
-      <Course variants={fade}>
-        <motion.div className="card-content" variants={fade}>
-          <h2>Node.js va Backend Dasturlash</h2>
-          <p>Node.js yordamida backend dasturlash va API qurishni o‘rganing.</p>
-        </motion.div>
-        <Link to="/courses/nodejs">
-          <motion.img variants={photoAnim} src={node} alt="nodejs" />
-        </Link>
-      </Course>
+      
+      {CourseState.map((course) => (
+        
+        <Course key={course.url} variants={fade}>
+          <motion.div className="card-content" variants={fade}>
+            <h2>{course.title}</h2>
+            <p>{course.overview.description}</p>
+          </motion.div>
+          <Link to={course.url}>
+            <motion.img
+              variants={photoAnim}
+              src={course.mainImg}
+              alt={course.title}
+            />
+          </Link>
+        </Course>
+      ))}
     </StyledCourses>
   );
 };
@@ -85,8 +67,8 @@ const Course = styled(motion.div)`
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
   }
   .card-content {
     padding: 1.5rem;

@@ -24,8 +24,8 @@ const AboutUs = () => {
 
 const StyledAboutUs = styled(motion.div)`
   background: #1b1b1b;
-  /* min-height: 100vh; - Bu qator olib tashlandi */
-  padding-bottom: 2rem; /* Oxirgi bo‘limdan keyin minimal bo‘sh joy */
+  min-height: 100vh; /* Qayta qo‘shish */
+  padding-bottom: 2rem;
 `;
 
 export default AboutUs;

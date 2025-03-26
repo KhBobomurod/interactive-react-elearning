@@ -2,28 +2,13 @@
 
 // Sahifa animatsiyasi (umumiy sahifa yuklanishi uchun)
 export const pageAnimation = {
-  hidden: {
-    opacity: 0,
-    y: 200, // Bir oz kamaytirdik, chunki 300 juda katta edi
-  },
+  hidden: { opacity: 0, x: -100 },
   show: {
     opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6, // Bir oz uzaytirdik, yumshoqroq ko‘rinish uchun
-      when: "beforeChildren",
-      staggerChildren: 0.3, // Bolalarni biroz sekinroq paydo bo‘lishi uchun
-      ease: "easeOut",
-    },
+    x: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
   },
-  exit: {
-    opacity: 0,
-    y: 200,
-    transition: {
-      duration: 0.5,
-      ease: "easeIn",
-    },
-  },
+  exit: { opacity: 0, x: 100, transition: { duration: 0.5, ease: "easeIn" } },
 };
 
 // Sarlavhalar uchun animatsiya (AboutSection'dagi h2 uchun)
@@ -87,6 +72,7 @@ export const toggleAnim = {
     transition: {
       duration: 0.4,
       ease: "easeOut",
+      staggerChildren: 0.2,
     },
   },
   exit: {

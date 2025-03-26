@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Editor from "@monaco-editor/react";
 import checkCode from "../utils/codeChecker";
 import { FaClock, FaLevelUpAlt, FaUsers, FaBook } from "react-icons/fa";
+import CourseTest from "../components/CourseTest";
 
 const CourseDetail = () => {
   const history = useHistory();
@@ -125,6 +126,9 @@ const CourseDetail = () => {
                   {course.lessons[currentLesson].title}
                 </h3>
                 <Lesson {...course.lessons[currentLesson]} />
+                <CourseTest
+                  questions={course.lessons[currentLesson].questions}
+                />
                 <Progress>
                   {completedLessons[course.lessons[currentLesson].id] ? (
                     <>
@@ -179,11 +183,18 @@ const Lesson = ({ title, video, text, tasks, duration }) => {
   const [result, setResult] = useState("");
   const [answer, setAnswer] = useState("");
 
-  const submitAnswer = (taskContent) => {
-    console.log(`Javob yuborildi: ${answer} uchun ${taskContent}`);
+  const submitAnswer = (taskContent, correctAnswer) => {
+    if (answer.trim() === "") {
+      alert("Iltimos, javob kiriting!");
+      return;
+    }
+    if (answer.toLowerCase() === correctAnswer.toLowerCase()) {
+      alert("To‘g‘ri javob!");
+    } else {
+      alert("Noto‘g‘ri javob. Qayta urinib ko‘ring!");
+    }
     setAnswer("");
   };
-
   return (
     <StyledLesson>
       <h4>{title}</h4>
@@ -231,7 +242,7 @@ const Lesson = ({ title, video, text, tasks, duration }) => {
                   onChange={(e) => setAnswer(e.target.value)}
                   placeholder="Javobingizni kiriting"
                 />
-                <button onClick={() => submitAnswer(task.content)}>
+                <button onClick={() => submitAnswer(task.content, task.answer)}>
                   Yuborish
                 </button>
               </>

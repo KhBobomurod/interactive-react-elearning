@@ -12,9 +12,14 @@ const AdminPanel = () => {
 
   // Sahifa yuklanganda localStorage’dan xabarlarni olish
   useEffect(() => {
-    const storedMessages = localStorage.getItem("contactMessages");
-    if (storedMessages) {
-      setMessages(JSON.parse(storedMessages));
+    try {
+      const storedMessages = localStorage.getItem("contactMessages");
+      if (storedMessages) {
+        setMessages(JSON.parse(storedMessages));
+      }
+    } catch (error) {
+      console.error("Xabarlarni o‘qishda xato:", error);
+      setMessages([]);
     }
   }, []);
 

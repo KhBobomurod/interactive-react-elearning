@@ -1,22 +1,43 @@
 // src/components/Nav.js
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
+// Nav animatsiyasi
+const navVariants = {
+  hidden: { opacity: 0, y: -50 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
 const Nav = () => {
   const { pathname } = useLocation();
+  const [isOpen, setIsOpen] = useState(false); // Hamburger menyusi holati
 
   return (
-    <StyledNav>
+    <StyledNav variants={navVariants} initial="hidden" animate="show">
       <h1>
         <Link id="logo" to="/">
           e-Learning
         </Link>
       </h1>
-      <ul>
+      <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
+        <span />
+        <span />
+        <span />
+      </Hamburger>
+      <ul className={isOpen ? "open" : ""}>
         <li>
-          <Link to="/">About Us</Link>
+          <Link to="/" onClick={() => setIsOpen(false)}>
+            About Us
+          </Link>
           <Line
             transition={{ duration: 0.75 }}
             initial={{ width: "0%" }}
@@ -24,7 +45,9 @@ const Nav = () => {
           />
         </li>
         <li>
-          <Link to="/courses">Courses</Link>
+          <Link to="/courses" onClick={() => setIsOpen(false)}>
+            Courses
+          </Link>
           <Line
             transition={{ duration: 0.75 }}
             initial={{ width: "0%" }}
@@ -32,7 +55,9 @@ const Nav = () => {
           />
         </li>
         <li>
-          <Link to="/contact">Contact</Link>
+          <Link to="/contact" onClick={() => setIsOpen(false)}>
+            Contact
+          </Link>
           <Line
             transition={{ duration: 0.75 }}
             initial={{ width: "0%" }}
@@ -44,10 +69,10 @@ const Nav = () => {
   );
 };
 
-const StyledNav = styled.nav`
+// Styled Components
+const StyledNav = styled(motion.nav)`
   min-height: 10vh;
   display: flex;
-  margin: auto;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 10rem;
@@ -56,6 +81,7 @@ const StyledNav = styled.nav`
   top: 0;
   z-index: 10;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
   a {
     color: #fff;
     text-decoration: none;
@@ -65,51 +91,123 @@ const StyledNav = styled.nav`
       color: #30bee1;
     }
   }
+
   ul {
     display: flex;
     list-style: none;
+    gap: 5rem;
   }
+
   #logo {
     font-weight: lighter;
     font-size: 1.8rem;
     font-family: "Silkscreen", cursive;
+    color: #30bee1;
+    transition: color 0.3s ease;
+    &:hover {
+      color: #1a9cbf;
+    }
   }
+
   li {
-    padding-left: 5rem;
     position: relative;
   }
+
   @media (max-width: 1300px) {
     padding: 1rem 5rem;
-    flex-direction: column;
     #logo {
-      display: inline-block;
-      margin-bottom: 1rem;
+      font-size: 1.6rem;
     }
     ul {
-      margin-top: 1rem;
-      justify-content: space-around;
-      width: 100%;
-      li {
-        padding: 0;
-      }
+      gap: 3rem;
     }
   }
+
   @media (max-width: 768px) {
-    padding: 1rem 3rem;
+    padding: 1rem 2rem;
+    position: relative;
+
     #logo {
       font-size: 1.5rem;
     }
-    a {
-      font-size: 1rem;
+
+    ul {
+      display: none; /* Dastlab menyular yashirin */
+      flex-direction: column;
+      position: absolute;
+      top: 10vh;
+      left: 0;
+      width: 100%;
+      background: #2a2e35;
+      padding: 1rem 0;
+      gap: 1rem;
+      text-align: center;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      z-index: 9;
+    }
+
+    ul.open {
+      display: flex; /* Menyu ochilganda ko‘rinadi */
+    }
+
+    li {
+      padding: 1rem 0;
     }
   }
+
   @media (max-width: 480px) {
     padding: 1rem 1rem;
     #logo {
       font-size: 1.3rem;
     }
     a {
-      font-size: 0.9rem;
+      font-size: 1rem;
+    }
+  }
+`;
+
+const Hamburger = styled.div`
+  display: none; /* Dastlab yashirin */
+
+  @media (max-width: 768px) {
+    display: flex; /* 768px dan kichik ekranlarda ko‘rinadi */
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 11;
+
+    span {
+      width: 25px;
+      height: 3px;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+
+    /* Hamburger ochilganda X shakliga o‘tadi */
+    ${({ isOpen }) =>
+      isOpen &&
+      `
+      span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      span:nth-child(2) {
+        opacity: 0;
+      }
+      span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+    `}
+
+    @media (max-width: 480px) {
+      top: 1.5rem;
+      right: 1rem;
+      span {
+        width: 20px;
+        height: 2px;
+      }
     }
   }
 `;
@@ -126,6 +224,9 @@ const Line = styled(motion.div)`
     width: 100%;
     height: 0.2rem;
     bottom: -50%;
+  }
+  @media (max-width: 768px) {
+    bottom: -20%;
   }
 `;
 

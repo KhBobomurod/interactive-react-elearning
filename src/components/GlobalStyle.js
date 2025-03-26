@@ -8,15 +8,24 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    background-color: #1b1b1b;
-    font-family: 'SF Pro Display', sans-serif;
+    background: #1b1b1b;
     color: #fff;
+    font-family: "Poppins", sans-serif;
     overflow-x: hidden;
-    &::-webkit-scrollbar {
-      width: 8px; /* Scroll-bar kengligi */
-      
-    }
+  &::-webkit-scrollbar {
+    width: 8px;
   }
+  &::-webkit-scrollbar-track {
+    background: #2a2a2a;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #30bee1;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #1a9cbf;
+  }
+}
 
   button {
     font-weight: bold;

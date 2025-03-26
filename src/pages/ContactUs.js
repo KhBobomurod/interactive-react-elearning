@@ -34,16 +34,16 @@ const Contact = () => {
 
     // EmailJS orqali xabar yuborish
     emailjs
-    .send(
-      "service_q4qmgpy", // Service ID
-      "template_d4xsgla", // Template ID
-      {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-      },
-      "oivxfAGIB_SFedgFO" // User ID
-    )
+      .send(
+        "service_q4qmgpy", // Service ID
+        "template_d4xsgla", // Template ID
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        },
+        "oivxfAGIB_SFedgFO" // User ID
+      )
       .then(
         (result) => {
           setSuccess("Xabar muvaffaqiyatli yuborildi!");
@@ -51,7 +51,9 @@ const Contact = () => {
           setLoading(false);
         },
         (error) => {
-          setError("Xabar yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.");
+          setError(
+            "Xabar yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko‘ring."
+          );
           setLoading(false);
         }
       );
@@ -115,10 +117,14 @@ const Contact = () => {
 };
 
 const StyledContact = styled(motion.div)`
-  padding: 5rem 10rem;
+  padding: 2rem 4rem;
   background: #1b1b1b;
   color: #fff;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto; /* Agar kontent ekrandan chiqib ketsa, scroll qilish uchun */
   h2 {
     font-weight: lighter;
     font-size: 3rem;
@@ -135,6 +141,7 @@ const StyledContact = styled(motion.div)`
 
 const Form = styled.form`
   max-width: 600px;
+  width: 100%; /* Forma kengligini to‘liq qilamiz */
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -142,6 +149,8 @@ const Form = styled.form`
   label {
     font-size: 1.1rem;
     color: #ccc;
+    display: block; /* Label’ni har doim input ustida joylashishi uchun */
+    margin-bottom: 0.5rem;
   }
   input,
   textarea {
@@ -155,7 +164,13 @@ const Form = styled.form`
     outline: none;
     &:focus {
       border-color: #1a9cbf;
+      box-shadow: 0 0 5px rgba(48, 190, 225, 0.5); /* Fokuslanganda effek qo‘shish */
     }
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: #999;
+    opacity: 0.8;
   }
   textarea {
     min-height: 150px;
@@ -169,8 +184,8 @@ const Form = styled.form`
     border: none;
     border-radius: 0.5rem;
     color: #fff;
-    cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
-    opacity: ${props => (props.disabled ? 0.6 : 1)};
+    cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+    opacity: ${(props) => (props.disabled ? 0.6 : 1)};
     transition: background 0.3s ease;
     &:hover:not(:disabled) {
       background: #1a9cbf;
@@ -195,7 +210,7 @@ const ErrorMessage = styled(motion.p)`
 const mediaQueries = `
   @media (max-width: 1300px) {
     ${StyledContact} {
-      padding: 3rem 5rem;
+      padding: 4rem 3rem;
     }
     h2 {
       font-size: 2.5rem;
@@ -203,44 +218,143 @@ const mediaQueries = `
     p {
       font-size: 1.1rem;
     }
+    ${Form} {
+      gap: 1.5rem;
+      label {
+        font-size: 1rem;
+      }
+      input,
+      textarea {
+        font-size: 1rem;
+        padding: 0.8rem;
+      }
+      textarea {
+        min-height: 150px;
+      }
+      button {
+        font-size: 1rem;
+        padding: 0.8rem 2rem;
+      }
+    }
+    ${SuccessMessage}, ${ErrorMessage} {
+      font-size: 1rem;
+    }
   }
   @media (max-width: 768px) {
     ${StyledContact} {
-      padding: 2rem 3rem;
+      padding: 2rem 2rem;
+      padding-top: 5rem; /* Navigatsiyadan keyin bo‘shliq qoldirish uchun */
+      justify-content: flex-start; /* Kontentni tepadan boshlash */
+      min-height: auto; /* Min-height’ni olib tashlaymiz */
     }
     h2 {
       font-size: 2rem;
+      margin-bottom: 1.5rem;
     }
     p {
       font-size: 1rem;
+      margin-bottom: 2rem;
     }
-    input,
-    textarea {
-      font-size: 0.9rem;
+    ${Form} {
+      gap: 1.5rem; /* Bo‘shliqni oshiramiz */
+      label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+      input,
+      textarea {
+        font-size: 1.1rem; /* Font o‘lchamini kattalashtiramiz */
+        padding: 0.9rem; /* Padding’ni oshiramiz */
+      }
+      textarea {
+        min-height: 160px; /* Textarea balandligini oshiramiz */
+      }
+      button {
+        font-size: 1.1rem;
+        padding: 0.9rem 2rem;
+        width: 100%; /* Tugma kengligini to‘liq qilamiz */
+      }
     }
-    button {
+    ${SuccessMessage}, ${ErrorMessage} {
       font-size: 1rem;
-      padding: 0.7rem 1.5rem;
+      margin-bottom: 0.8rem;
     }
   }
   @media (max-width: 480px) {
     ${StyledContact} {
       padding: 1.5rem 1rem;
+      padding-top: 4rem; /* Navigatsiyadan keyin bo‘shliq qoldirish uchun */
+      justify-content: flex-start; /* Kontentni tepadan boshlash */
+      min-height: auto; /* Min-height’ni olib tashlaymiz */
     }
     h2 {
       font-size: 1.8rem;
+      margin-bottom: 1.2rem;
     }
     p {
       font-size: 0.9rem;
+      margin-bottom: 1.5rem;
     }
-    input,
-    textarea {
-      font-size: 0.85rem;
+    ${Form} {
+      gap: 1.2rem; /* Bo‘shliqni biroz kamaytiramiz, lekin hali ham qulay */
+      label {
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+      }
+      input,
+      textarea {
+        font-size: 1rem; /* Font o‘lchamini yanada kattalashtiramiz */
+        padding: 0.8rem; /* Padding’ni yanada oshiramiz */
+      }
+      textarea {
+        min-height: 140px; /* Textarea balandligini oshiramiz */
+      }
+      button {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+        width: 100%;
+      }
     }
-    button {
+    ${SuccessMessage}, ${ErrorMessage} {
       font-size: 0.9rem;
-      padding: 0.6rem 1.2rem;
-      width: 100%;
+      margin-bottom: 0.6rem;
+    }
+  }
+  @media (max-width: 320px) {
+    ${StyledContact} {
+      padding: 1rem 0.5rem;
+      padding-top: 3.5rem; /* Navigatsiyadan keyin bo‘shliq qoldirish uchun */
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    ${Form} {
+      gap: 1rem;
+      label {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+      }
+      input,
+      textarea {
+        font-size: 0.95rem;
+        padding: 0.7rem;
+      }
+      textarea {
+        min-height: 120px;
+      }
+      button {
+        font-size: 0.95rem;
+        padding: 0.7rem 1rem;
+      }
+    }
+    ${SuccessMessage}, ${ErrorMessage} {
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
     }
   }
 `;

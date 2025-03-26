@@ -11,19 +11,23 @@ const FaqSection = () => {
   const faqs = [
     {
       question: "Can I learn programming from 0 on your platform?",
-      answer: "Yes, absolutely! Our platform offers beginner-friendly courses that start from the basics, guiding you step-by-step to become proficient in programming.",
+      answer:
+        "Yes, absolutely! Our platform offers beginner-friendly courses that start from the basics, guiding you step-by-step to become proficient in programming.",
     },
     {
       question: "How much should I have to pay per month?",
-      answer: "Our subscription plans start at $10 per month, but we also offer a one-time payment option for lifetime access to specific courses.",
+      answer:
+        "Our subscription plans start at $10 per month, but we also offer a one-time payment option for lifetime access to specific courses.",
     },
     {
       question: "Is it possible to pay in full one go?",
-      answer: "Yes, you can pay for the entire course upfront and get lifetime access without any recurring fees.",
+      answer:
+        "Yes, you can pay for the entire course upfront and get lifetime access without any recurring fees.",
     },
     {
       question: "If I buy the course, can my brother and I also study?",
-      answer: "Each course purchase is tied to a single user account for personalized progress tracking. However, you can share the course materials informally with your brother.",
+      answer:
+        "Each course purchase is tied to a single user account for personalized progress tracking. However, you can share the course materials informally with your brother.",
     },
   ];
 
@@ -73,11 +77,19 @@ const Faq = styled(About)`
   .question {
     padding: 1rem 0rem;
     cursor: pointer;
+    user-select: none; /* Matnni belgilab bo‘lmaydigan qilish */
+    -webkit-user-select: none; /* WebKit brauzerlari uchun */
+    -moz-user-select: none; /* Firefox uchun */
+    -ms-user-select: none; /* IE/Edge uchun */
   }
   .answer {
     p {
       padding: 0.5rem 0rem;
       font-size: 1.1rem;
+      user-select: none; /* Matnni belgilab bo‘lmaydigan qilish */
+      -webkit-user-select: none; /* WebKit brauzerlari uchun */
+      -moz-user-select: none; /* Firefox uchun */
+      -ms-user-select: none; /* IE/Edge uchun */
     }
   }
   .faq-line {

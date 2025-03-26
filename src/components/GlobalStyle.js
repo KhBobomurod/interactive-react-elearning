@@ -11,6 +11,11 @@ const GlobalStyle = createGlobalStyle`
     background-color: #1b1b1b;
     font-family: 'SF Pro Display', sans-serif;
     color: #fff;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+      width: 8px; /* Scroll-bar kengligi */
+      
+    }
   }
 
   button {

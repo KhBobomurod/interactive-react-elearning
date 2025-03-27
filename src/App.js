@@ -34,7 +34,7 @@ function App() {
           <Route path="/contact">
             <ContactUs />
           </Route>
-          <Route path="/admin">
+          <Route path="/dashboard-admin">
             <AdminPanel />
           </Route>
         </Switch>

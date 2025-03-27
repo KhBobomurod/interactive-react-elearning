@@ -18,6 +18,9 @@ const CourseDetail = () => {
   const [course, setCourse] = useState(null);
   const [currentLesson, setCurrentLesson] = useState(0);
   const [showLessons, setShowLessons] = useState(false);
+  const [showTest, setShowTest] = useState(false); // Dars testini ko‘rsatish
+  const [showFinalTest, setShowFinalTest] = useState(false); // Umumiy testni ko‘rsatish
+  const [lessonTestScores, setLessonTestScores] = useState({}); // Dars testlari natijalari
   const dispatch = useDispatch();
   const completedLessons = useSelector((state) => state.completedLessons);
 
@@ -28,15 +31,34 @@ const CourseDetail = () => {
     setCourse(currentCourse || null);
   }, [courses, url]);
 
+  // Dars testini tugatish
+  const handleCompleteLessonTest = (lessonId, score) => {
+    setLessonTestScores((prev) => ({ ...prev, [lessonId]: score }));
+    if (score >= 60) {
+      dispatch({ type: "COMPLETE_LESSON", payload: lessonId });
+      setShowTest(false);
+    }
+  };
+
+  // Umumiy testni tugatish
+  const handleFinalTestComplete = (score) => {
+    if (score >= 80) {
+      // Umumiy testdan o‘tgan bo‘lsa, sertifikat olish imkoniyati ochiladi
+      setShowFinalTest(false);
+    }
+  };
+
   const nextLesson = () => {
     if (course && currentLesson < course.lessons.length - 1) {
       setCurrentLesson(currentLesson + 1);
+      setShowTest(false);
     }
   };
 
   const prevLesson = () => {
     if (currentLesson > 0) {
       setCurrentLesson(currentLesson - 1);
+      setShowTest(false);
     }
   };
 
@@ -46,6 +68,758 @@ const CourseDetail = () => {
 
   const markLessonIncomplete = (lessonId) => {
     dispatch({ type: "MARK_INCOMPLETE", payload: lessonId });
+  };
+
+  // Barcha darslar tugallanganligini tekshirish
+  const allLessonsCompleted = () => {
+    if (!course) return false;
+    return course.lessons.every((lesson) => completedLessons[lesson.id]);
+  };
+
+  // Dars testiga o‘tish
+  const goToLessonTest = () => {
+    setShowTest(true);
+  };
+
+  // Umumiy testga o‘tish
+  const goToFinalTest = () => {
+    setShowFinalTest(true);
+  };
+
+  // Har bir kurs va dars uchun savollar
+  const lessonQuestions = {
+    "/react": {
+      1: [
+        {
+          id: 1,
+          question: "React nima?",
+          options: ["Kutubxona", "Framework", "Til", "Ma'lumotlar bazasi"],
+          correct: "Kutubxona",
+        },
+        {
+          id: 2,
+          question: "JSX nima?",
+          options: [
+            "Sintaksis kengaytmasi",
+            "Ma'lumotlar bazasi",
+            "Framework",
+            "Server",
+          ],
+          correct: "Sintaksis kengaytmasi",
+        },
+      ],
+      2: [
+        {
+          id: 1,
+          question: "State va Props o‘rtasidagi farq nima?",
+          options: [
+            "State ichki, Props tashqi",
+            "Props ichki, State tashqi",
+            "Ikkalasi bir xil",
+            "Farq yo‘q",
+          ],
+          correct: "State ichki, Props tashqi",
+        },
+      ],
+      3: [
+        {
+          id: 1,
+          question: "Komponentlar qanday nomlanadi?",
+          options: [
+            "Katta harf bilan",
+            "Kichik harf bilan",
+            "Farqi yo‘q",
+            "Faqat raqamlar bilan",
+          ],
+          correct: "Katta harf bilan",
+        },
+      ],
+      4: [
+        {
+          id: 1,
+          question: "componentDidMount qachon ishga tushadi?",
+          options: [
+            "Komponent render bo‘lganda",
+            "Komponent o‘chirilganda",
+            "State o‘zgarganda",
+            "Props o‘zgarganda",
+          ],
+          correct: "Komponent render bo‘lganda",
+        },
+      ],
+      5: [
+        {
+          id: 1,
+          question: "useState hook’i nima uchun ishlatiladi?",
+          options: [
+            "State boshqarish uchun",
+            "API chaqirish uchun",
+            "Routing uchun",
+            "Styling uchun",
+          ],
+          correct: "State boshqarish uchun",
+        },
+      ],
+      6: [
+        {
+          id: 1,
+          question: "React Router’da Route nima uchun ishlatiladi?",
+          options: [
+            "Sahifalar o‘rtasida navigatsiya uchun",
+            "State boshqarish uchun",
+            "API chaqirish uchun",
+            "Komponent yaratish uchun",
+          ],
+          correct: "Sahifalar o‘rtasida navigatsiya uchun",
+        },
+      ],
+      7: [
+        {
+          id: 1,
+          question: "Redux’da createStore nima qiladi?",
+          options: [
+            "Store yaratadi",
+            "Komponent yaratadi",
+            "API chaqiradi",
+            "Routing qiladi",
+          ],
+          correct: "Store yaratadi",
+        },
+      ],
+      8: [
+        {
+          id: 1,
+          question: "Todo ilovasida useState qanday ishlatiladi?",
+          options: [
+            "Vazifalar ro‘yxatini boshqarish uchun",
+            "API chaqirish uchun",
+            "Routing uchun",
+            "Styling uchun",
+          ],
+          correct: "Vazifalar ro‘yxatini boshqarish uchun",
+        },
+      ],
+    },
+    "/javascript": {
+      1: [
+        {
+          id: 1,
+          question: "JavaScript’da console.log nima uchun ishlatiladi?",
+          options: [
+            "Ma'lumotni konsolga chiqarish uchun",
+            "Faylni o‘qish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Ma'lumotni konsolga chiqarish uchun",
+        },
+      ],
+      2: [
+        {
+          id: 1,
+          question: "let va const o‘rtasidagi farq nima?",
+          options: [
+            "let o‘zgaruvchan, const o‘zgarmas",
+            "const o‘zgaruvchan, let o‘zgarmas",
+            "Ikkalasi bir xil",
+            "Farq yo‘q",
+          ],
+          correct: "let o‘zgaruvchan, const o‘zgarmas",
+        },
+      ],
+      3: [
+        {
+          id: 1,
+          question: "if-else operatori nima uchun ishlatiladi?",
+          options: [
+            "Shartlarni tekshirish uchun",
+            "Massivlarni boshqarish uchun",
+            "Funksiyalarni yaratish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Shartlarni tekshirish uchun",
+        },
+      ],
+      4: [
+        {
+          id: 1,
+          question: "for tsikli qanday ishlaydi?",
+          options: [
+            "Takrorlanadigan amallar uchun",
+            "Shartlarni tekshirish uchun",
+            "Funksiyalarni chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Takrorlanadigan amallar uchun",
+        },
+      ],
+      5: [
+        {
+          id: 1,
+          question: "Funksiyada return nima qiladi?",
+          options: [
+            "Natijani qaytaradi",
+            "Funksiyani to‘xtatadi",
+            "Massiv yaratadi",
+            "API chaqiradi",
+          ],
+          correct: "Natijani qaytaradi",
+        },
+      ],
+      6: [
+        {
+          id: 1,
+          question: "forEach metodi nima uchun ishlatiladi?",
+          options: [
+            "Massiv elementlarini aylanib chiqish uchun",
+            "Shartlarni tekshirish uchun",
+            "Funksiyalarni yaratish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Massiv elementlarini aylanib chiqish uchun",
+        },
+      ],
+      7: [
+        {
+          id: 1,
+          question: "Kalkulyator ilovasida qaysi operatorlar ishlatiladi?",
+          options: ["+, -, *, /", "&&, ||", "==, !==", ">, <"],
+          correct: "+, -, *, /",
+        },
+      ],
+    },
+    "/data-science": {
+      1: [
+        {
+          id: 1,
+          question: "Python’da print funksiyasi nima qiladi?",
+          options: [
+            "Ma'lumotni ekranga chiqaradi",
+            "Faylni o‘qish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Ma'lumotni ekranga chiqaradi",
+        },
+      ],
+      2: [
+        {
+          id: 1,
+          question: "pandas’da read_csv nima uchun ishlatiladi?",
+          options: [
+            "CSV faylni o‘qish uchun",
+            "Grafik chizish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+            "Faylni yozish uchun",
+          ],
+          correct: "CSV faylni o‘qish uchun",
+        },
+      ],
+      3: [
+        {
+          id: 1,
+          question: "matplotlib’da plot nima uchun ishlatiladi?",
+          options: [
+            "Grafik chizish uchun",
+            "Ma'lumotni o‘qish uchun",
+            "Faylni yozish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Grafik chizish uchun",
+        },
+      ],
+      4: [
+        {
+          id: 1,
+          question: "sklearn’da LinearRegression nima uchun ishlatiladi?",
+          options: [
+            "Regressiya modeli yaratish uchun",
+            "Grafik chizish uchun",
+            "Ma'lumotni o‘qish uchun",
+            "Faylni yozish uchun",
+          ],
+          correct: "Regressiya modeli yaratish uchun",
+        },
+      ],
+      5: [
+        {
+          id: 1,
+          question: "predict funksiyasi nima uchun ishlatiladi?",
+          options: [
+            "Bashorat qilish uchun",
+            "Ma'lumotni o‘qish uchun",
+            "Grafik chizish uchun",
+            "Faylni yozish uchun",
+          ],
+          correct: "Bashorat qilish uchun",
+        },
+      ],
+    },
+    "/ui-ux": {
+      1: [
+        {
+          id: 1,
+          question: "Eskiz nima uchun ishlatiladi?",
+          options: [
+            "Dizayn g‘oyalarini tez shakllantirish uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Dizayn g‘oyalarini tez shakllantirish uchun",
+        },
+      ],
+      2: [
+        {
+          id: 1,
+          question: "Figma nima uchun ishlatiladi?",
+          options: [
+            "Interfeys dizaynini yaratish uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Interfeys dizaynini yaratish uchun",
+        },
+      ],
+      3: [
+        {
+          id: 1,
+          question: "Adobe XD’da prototip nima uchun ishlatiladi?",
+          options: [
+            "Navigatsiyani sinash uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Navigatsiyani sinash uchun",
+        },
+      ],
+      5: [
+        {
+          id: 1,
+          question: "Mobil ilova dizaynida nimalarga e’tibor berish kerak?",
+          options: [
+            "Foydalanuvchi tajribasiga",
+            "Kod yozishga",
+            "API chaqirishga",
+            "Ma'lumotlar bazasiga ulanishga",
+          ],
+          correct: "Foydalanuvchi tajribasiga",
+        },
+      ],
+    },
+    "/cybersecurity": {
+      2: [
+        {
+          id: 1,
+          question: "Tarmoq konfiguratsiyasi tahlili nima uchun muhim?",
+          options: [
+            "Xavfsizlik zaifliklarini aniqlash uchun",
+            "Dizayn yaratish uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Xavfsizlik zaifliklarini aniqlash uchun",
+        },
+      ],
+      3: [
+        {
+          id: 1,
+          question: "Shifrlash algoritmi nima uchun ishlatiladi?",
+          options: [
+            "Ma'lumotlarni himoya qilish uchun",
+            "Dizayn yaratish uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Ma'lumotlarni himoya qilish uchun",
+        },
+      ],
+      5: [
+        {
+          id: 1,
+          question: "Zaifliklarni aniqlash nima uchun muhim?",
+          options: [
+            "Tizim xavfsizligini oshirish uchun",
+            "Dizayn yaratish uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Tizim xavfsizligini oshirish uchun",
+        },
+      ],
+    },
+    "/flutter": {
+      1: [
+        {
+          id: 1,
+          question: "Flutter nima uchun ishlatiladi?",
+          options: [
+            "Mobil ilovalar yaratish uchun",
+            "Dizayn yaratish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Mobil ilovalar yaratish uchun",
+        },
+      ],
+      2: [
+        {
+          id: 1,
+          question: "Dart’da void nima uchun ishlatiladi?",
+          options: [
+            "Funksiyaning qaytish qiymati yo‘qligini ko‘rsatish uchun",
+            "Massiv yaratish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Funksiyaning qaytish qiymati yo‘qligini ko‘rsatish uchun",
+        },
+      ],
+      3: [
+        {
+          id: 1,
+          question: "Scaffold nima uchun ishlatiladi?",
+          options: [
+            "Mobil sahifa tuzilmasini yaratish uchun",
+            "Dizayn yaratish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Mobil sahifa tuzilmasini yaratish uchun",
+        },
+      ],
+      4: [
+        {
+          id: 1,
+          question: "setState nima uchun ishlatiladi?",
+          options: [
+            "State’ni yangilash uchun",
+            "Dizayn yaratish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "State’ni yangilash uchun",
+        },
+      ],
+      5: [
+        {
+          id: 1,
+          question: "Todo ilovasida List nima uchun ishlatiladi?",
+          options: [
+            "Vazifalar ro‘yxatini saqlash uchun",
+            "Dizayn yaratish uchun",
+            "API chaqirish uchun",
+            "Ma'lumotlar bazasiga ulanish uchun",
+          ],
+          correct: "Vazifalar ro‘yxatini saqlash uchun",
+        },
+      ],
+    },
+    "/blockchain": {
+      2: [
+        {
+          id: 1,
+          question: "Bitcoin tranzaksiyasi qanday ishlaydi?",
+          options: [
+            "Blokcheyn orqali",
+            "Dizayn yaratish orqali",
+            "Kod yozish orqali",
+            "API chaqirish orqali",
+          ],
+          correct: "Blokcheyn orqali",
+        },
+      ],
+      3: [
+        {
+          id: 1,
+          question: "Smart kontrakt nima uchun ishlatiladi?",
+          options: [
+            "Avtomatik tranzaksiyalarni boshqarish uchun",
+            "Dizayn yaratish uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Avtomatik tranzaksiyalarni boshqarish uchun",
+        },
+      ],
+      4: [
+        {
+          id: 1,
+          question: "web3 nima uchun ishlatiladi?",
+          options: [
+            "Blokcheyn bilan ishlash uchun",
+            "Dizayn yaratish uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Blokcheyn bilan ishlash uchun",
+        },
+      ],
+      5: [
+        {
+          id: 1,
+          question: "ERC-20 tokeni nima uchun ishlatiladi?",
+          options: [
+            "Kriptovalyuta yaratish uchun",
+            "Dizayn yaratish uchun",
+            "Kod yozish uchun",
+            "API chaqirish uchun",
+          ],
+          correct: "Kriptovalyuta yaratish uchun",
+        },
+      ],
+    },
+  };
+
+  // Har bir kurs uchun umumiy test savollari
+  const finalTestQuestions = {
+    "/react": [
+      {
+        id: 1,
+        question: "React kursining asosiy maqsadi nima edi?",
+        options: [
+          "Frontend dasturlashni o‘rganish",
+          "Dizayn qilish",
+          "Marketing",
+          "Ma'lumotlar bazasi",
+        ],
+        correct: "Frontend dasturlashni o‘rganish",
+      },
+      {
+        id: 2,
+        question: "React’da qaysi texnologiyalar o‘rganildi?",
+        options: [
+          "React va Redux",
+          "Photoshop",
+          "SQL",
+          "Marketing strategiyalari",
+        ],
+        correct: "React va Redux",
+      },
+      {
+        id: 3,
+        question: "React kursida qanday ilova yaratildi?",
+        options: [
+          "Todo ilovasi",
+          "Dizayn prototipi",
+          "Ma'lumotlar bazasi",
+          "Marketing rejasi",
+        ],
+        correct: "Todo ilovasi",
+      },
+    ],
+    "/javascript": [
+      {
+        id: 1,
+        question: "JavaScript kursining asosiy maqsadi nima edi?",
+        options: [
+          "Dasturlash asoslarini o‘rganish",
+          "Dizayn qilish",
+          "Marketing",
+          "Ma'lumotlar bazasi",
+        ],
+        correct: "Dasturlash asoslarini o‘rganish",
+      },
+      {
+        id: 2,
+        question: "JavaScript’da qaysi tushunchalar o‘rganildi?",
+        options: [
+          "Tsikllar va funksiyalar",
+          "Photoshop",
+          "SQL",
+          "Marketing strategiyalari",
+        ],
+        correct: "Tsikllar va funksiyalar",
+      },
+      {
+        id: 3,
+        question: "JavaScript kursida qanday ilova yaratildi?",
+        options: [
+          "Kalkulyator",
+          "Dizayn prototipi",
+          "Ma'lumotlar bazasi",
+          "Marketing rejasi",
+        ],
+        correct: "Kalkulyator",
+      },
+    ],
+    "/data-science": [
+      {
+        id: 1,
+        question: "Data Science kursining asosiy maqsadi nima edi?",
+        options: [
+          "Ma'lumotlarni tahlil qilishni o‘rganish",
+          "Dizayn qilish",
+          "Marketing",
+          "Ma'lumotlar bazasi",
+        ],
+        correct: "Ma'lumotlarni tahlil qilishni o‘rganish",
+      },
+      {
+        id: 2,
+        question: "Data Science’da qaysi texnologiyalar o‘rganildi?",
+        options: [
+          "Pandas va sklearn",
+          "Photoshop",
+          "SQL",
+          "Marketing strategiyalari",
+        ],
+        correct: "Pandas va sklearn",
+      },
+      {
+        id: 3,
+        question: "Data Science kursida qanday natija olindi?",
+        options: [
+          "Bashorat qilish",
+          "Dizayn prototipi",
+          "Ma'lumotlar bazasi",
+          "Marketing rejasi",
+        ],
+        correct: "Bashorat qilish",
+      },
+    ],
+    "/ui-ux": [
+      {
+        id: 1,
+        question: "UI/UX kursining asosiy maqsadi nima edi?",
+        options: [
+          "Foydalanuvchi tajribasini yaxshilashni o‘rganish",
+          "Dasturlash",
+          "Marketing",
+          "Ma'lumotlar bazasi",
+        ],
+        correct: "Foydalanuvchi tajribasini yaxshilashni o‘rganish",
+      },
+      {
+        id: 2,
+        question: "UI/UX’da qaysi vositalar o‘rganildi?",
+        options: [
+          "Figma va Adobe XD",
+          "React",
+          "SQL",
+          "Marketing strategiyalari",
+        ],
+        correct: "Figma va Adobe XD",
+      },
+      {
+        id: 3,
+        question: "UI/UX kursida qanday loyiha yaratildi?",
+        options: [
+          "Mobil ilova dizayni",
+          "Kalkulyator",
+          "Ma'lumotlar bazasi",
+          "Marketing rejasi",
+        ],
+        correct: "Mobil ilova dizayni",
+      },
+    ],
+    "/cybersecurity": [
+      {
+        id: 1,
+        question: "Cybersecurity kursining asosiy maqsadi nima edi?",
+        options: [
+          "Tizim xavfsizligini o‘rganish",
+          "Dizayn qilish",
+          "Marketing",
+          "Ma'lumotlar bazasi",
+        ],
+        correct: "Tizim xavfsizligini o‘rganish",
+      },
+      {
+        id: 2,
+        question: "Cybersecurity’da qaysi tushunchalar o‘rganildi?",
+        options: [
+          "Shifrlash va zaifliklar",
+          "Photoshop",
+          "SQL",
+          "Marketing strategiyalari",
+        ],
+        correct: "Shifrlash va zaifliklar",
+      },
+      {
+        id: 3,
+        question: "Cybersecurity kursida qanday tahlil qilindi?",
+        options: [
+          "Tarmoq konfiguratsiyasi",
+          "Dizayn prototipi",
+          "Ma'lumotlar bazasi",
+          "Marketing rejasi",
+        ],
+        correct: "Tarmoq konfiguratsiyasi",
+      },
+    ],
+    "/flutter": [
+      {
+        id: 1,
+        question: "Flutter kursining asosiy maqsadi nima edi?",
+        options: [
+          "Mobil ilovalar yaratishni o‘rganish",
+          "Dizayn qilish",
+          "Marketing",
+          "Ma'lumotlar bazasi",
+        ],
+        correct: "Mobil ilovalar yaratishni o‘rganish",
+      },
+      {
+        id: 2,
+        question: "Flutter’da qaysi texnologiyalar o‘rganildi?",
+        options: [
+          "Flutter va Dart",
+          "Photoshop",
+          "SQL",
+          "Marketing strategiyalari",
+        ],
+        correct: "Flutter va Dart",
+      },
+      {
+        id: 3,
+        question: "Flutter kursida qanday ilova yaratildi?",
+        options: [
+          "Todo ilovasi",
+          "Dizayn prototipi",
+          "Ma'lumotlar bazasi",
+          "Marketing rejasi",
+        ],
+        correct: "Todo ilovasi",
+      },
+    ],
+    "/blockchain": [
+      {
+        id: 1,
+        question: "Blockchain kursining asosiy maqsadi nima edi?",
+        options: [
+          "Blokcheyn texnologiyasini o‘rganish",
+          "Dizayn qilish",
+          "Marketing",
+          "Ma'lumotlar bazasi",
+        ],
+        correct: "Blokcheyn texnologiyasini o‘rganish",
+      },
+      {
+        id: 2,
+        question: "Blockchain’da qaysi texnologiyalar o‘rganildi?",
+        options: [
+          "Smart kontraktlar va web3",
+          "Photoshop",
+          "SQL",
+          "Marketing strategiyalari",
+        ],
+        correct: "Smart kontraktlar va web3",
+      },
+      {
+        id: 3,
+        question: "Blockchain kursida qanday loyiha yaratildi?",
+        options: [
+          "ERC-20 tokeni",
+          "Dizayn prototipi",
+          "Ma'lumotlar bazasi",
+          "Marketing rejasi",
+        ],
+        correct: "ERC-20 tokeni",
+      },
+    ],
   };
 
   return (
@@ -114,62 +888,104 @@ const CourseDetail = () => {
           )}
 
           {/* Darslar bo‘limi */}
-          {showLessons && (
+          {showLessons && !showFinalTest && (
             <>
               <Lessons
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <h3>
-                  Dars {currentLesson + 1}:{" "}
-                  {course.lessons[currentLesson].title}
-                </h3>
-                <Lesson {...course.lessons[currentLesson]} />
-                <CourseTest
-                  questions={course.lessons[currentLesson].questions}
-                />
-                <Progress>
-                  {completedLessons[course.lessons[currentLesson].id] ? (
-                    <>
-                      <p>Tugatildi!</p>
+                {!showTest ? (
+                  <>
+                    <h3>
+                      Dars {currentLesson + 1}:{" "}
+                      {course.lessons[currentLesson].title}
+                    </h3>
+                    <Lesson {...course.lessons[currentLesson]} />
+                    <Progress>
+                      {completedLessons[course.lessons[currentLesson].id] ? (
+                        <>
+                          <p>Tugatildi!</p>
+                          <button
+                            onClick={() =>
+                              markLessonIncomplete(
+                                course.lessons[currentLesson].id
+                              )
+                            }
+                          >
+                            Tugallanmadi
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <p>Tugallanmadi</p>
+                          <button onClick={goToLessonTest}>
+                            Dars Testiga O‘tish
+                          </button>
+                        </>
+                      )}
+                    </Progress>
+                    <Navigation>
                       <button
-                        onClick={() =>
-                          markLessonIncomplete(course.lessons[currentLesson].id)
-                        }
+                        onClick={prevLesson}
+                        disabled={currentLesson === 0}
                       >
-                        Tugallanmadi
+                        Oldingi dars
                       </button>
-                    </>
-                  ) : (
-                    <>
-                      <p>Tugallanmadi</p>
                       <button
-                        onClick={() =>
-                          markLessonComplete(course.lessons[currentLesson].id)
-                        }
+                        onClick={nextLesson}
+                        disabled={currentLesson === course.lessons.length - 1}
                       >
-                        Darsni tugatdim
+                        Keyingi dars
                       </button>
-                    </>
-                  )}
-                </Progress>
-                <Navigation>
-                  <button onClick={prevLesson} disabled={currentLesson === 0}>
-                    Oldingi dars
-                  </button>
-                  <button
-                    onClick={nextLesson}
-                    disabled={currentLesson === course.lessons.length - 1}
-                  >
-                    Keyingi dars
-                  </button>
-                </Navigation>
+                    </Navigation>
+                    {allLessonsCompleted() && (
+                      <button onClick={goToFinalTest}>
+                        Umumiy Testga O‘tish
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <CourseTest
+                    courseId={course.url}
+                    courseTitle={course.title}
+                    lessonId={course.lessons[currentLesson].id}
+                    questions={
+                      lessonQuestions[course.url]?.[currentLesson + 1] || [
+                        {
+                          id: 1,
+                          question:
+                            "Bu dars uchun savollar hali qo‘shilmagan. O‘qituvchiga murojaat qiling.",
+                          options: ["OK"],
+                          correct: "OK",
+                        },
+                      ]
+                    }
+                    onCompleteLessonTest={handleCompleteLessonTest}
+                  />
+                )}
               </Lessons>
               <ImageDisplay>
                 <img src={course.secondaryImg} alt="secondaryImg" />
               </ImageDisplay>
             </>
+          )}
+
+          {/* Umumiy test bo‘limi */}
+          {showFinalTest && (
+            <Lessons
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <CourseTest
+                courseId={course.url}
+                courseTitle={course.title}
+                questions={finalTestQuestions[course.url] || []}
+                isFinalTest={true}
+                onFinalTestComplete={handleFinalTestComplete}
+              />
+            </Lessons>
           )}
         </Details>
       )}
@@ -195,6 +1011,7 @@ const Lesson = ({ title, video, text, tasks, duration }) => {
     }
     setAnswer("");
   };
+
   return (
     <StyledLesson>
       <h4>{title}</h4>
@@ -548,6 +1365,20 @@ const Lessons = styled(motion.div)`
   h3 {
     font-size: 2rem;
     margin-bottom: 1.5rem;
+  }
+  button {
+    padding: 0.8rem 1.5rem;
+    background: #30bee1;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.1rem;
+    border-radius: 0.3rem;
+    margin-top: 1rem;
+    transition: background 0.3s ease;
+    &:hover {
+      background: #1a9cbf;
+    }
   }
   @media (max-width: 1300px) {
     padding: 2rem 3rem;

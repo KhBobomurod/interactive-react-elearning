@@ -6,8 +6,11 @@ import { jsPDF } from "jspdf";
 const CourseTest = ({
   courseId,
   courseTitle,
-  questions: propQuestions,
-  onCertificateDownload,
+  lessonId, // Dars ID'si
+  questions, // Dars uchun savollar
+  onCompleteLessonTest, // Dars testini tugatish uchun callback
+  isFinalTest, // Bu umumiy test ekanligini ko‘rsatadi
+  onFinalTestComplete, // Umumiy testni tugatish uchun callback
 }) => {
   const [score, setScore] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -17,23 +20,6 @@ const CourseTest = ({
   const [isEmailSet, setIsEmailSet] = useState(
     !!localStorage.getItem("userEmail")
   );
-
-  const defaultQuestions = [
-    {
-      id: 1,
-      question: "What is React?",
-      options: ["A library", "A framework", "A language", "A database"],
-      correct: "A library",
-    },
-    {
-      id: 2,
-      question: "What is JSX?",
-      options: ["A syntax extension", "A database", "A framework", "A server"],
-      correct: "A syntax extension",
-    },
-  ];
-
-  const questions = propQuestions || defaultQuestions;
 
   const handleSetEmail = (e) => {
     e.preventDefault();
@@ -56,11 +42,23 @@ const CourseTest = ({
     });
     const finalScore = (correctAnswers / questions.length) * 100;
     setScore(finalScore);
+
+    if (isFinalTest) {
+      // Umumiy test uchun
+      if (onFinalTestComplete) {
+        onFinalTestComplete(finalScore);
+      }
+    } else {
+      // Dars testini tugatish
+      if (onCompleteLessonTest) {
+        onCompleteLessonTest(lessonId, finalScore);
+      }
+    }
   };
 
   const generateCertificate = () => {
     if (!userEmail) {
-      alert("Please enter your email to download the certificate.");
+      alert("Iltimos, emailingizni kiriting!");
       setIsEmailSet(false);
       return;
     }
@@ -74,74 +72,84 @@ const CourseTest = ({
     doc.rect(10, 10, 190, 277);
     doc.setFontSize(24);
     doc.setTextColor(0, 120, 255);
-    doc.text(`Certificate of Completion`, 105, 50, { align: "center" });
+    doc.text(`Sertifikat`, 105, 50, { align: "center" });
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text(`This certifies that ${userName}`, 105, 70, { align: "center" });
-    doc.text(`(${userEmail})`, 105, 80, { align: "center" });
-    doc.text(`has successfully completed the course`, 105, 100, {
-      align: "center",
-    });
-    doc.text(`${courseTitle}`, 105, 120, { align: "center" });
+    doc.text(`${userName} (${userEmail})`, 105, 70, { align: "center" });
+    doc.text(`muvaffaqiyatli yakunladi`, 105, 90, { align: "center" });
+    doc.text(`${courseTitle} kursini`, 105, 110, { align: "center" });
     const safeEmail = userEmail.replace(/[@.]/g, "_");
     doc.save(`${safeEmail}_certificate.pdf`);
-
-    if (onCertificateDownload) {
-      onCertificateDownload();
-    }
   };
+
   return (
     <StyledTest>
-      <h3>Test for {courseTitle}</h3>
+      <h3>{isFinalTest ? `Umumiy Test: ${courseTitle}` : `Dars Testi`}</h3>
 
       {!isEmailSet && (
         <div className="email-form">
-          <p>Please enter your email to proceed:</p>
+          <p>Iltimos, emailingizni kiriting:</p>
           <form onSubmit={handleSetEmail}>
             <input
               type="email"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
-              placeholder="Your Email"
+              placeholder="Emailingiz"
               required
             />
-            <button type="submit">Save Email</button>
+            <button type="submit">Emailni Saqlash</button>
           </form>
         </div>
       )}
 
       {isEmailSet && score === null ? (
         <>
-          {questions.map((q) => (
-            <div key={q.id} className="question">
-              <p>{q.question}</p>
-              {q.options.map((option) => (
-                <label key={option}>
-                  <input
-                    type="radio"
-                    name={`question-${q.id}`}
-                    value={option}
-                    onChange={() => handleAnswer(q.id, option)}
-                  />
-                  {option}
-                </label>
-              ))}
-            </div>
-          ))}
-          <button onClick={handleSubmit}>Submit Test</button>
+          {questions.length > 0 ? (
+            questions.map((q) => (
+              <div key={q.id} className="question">
+                <p>{q.question}</p>
+                {q.options.map((option) => (
+                  <label key={option}>
+                    <input
+                      type="radio"
+                      name={`question-${q.id}`}
+                      value={option}
+                      onChange={() => handleAnswer(q.id, option)}
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            ))
+          ) : (
+            <p>
+              Bu test uchun savollar topilmadi. O‘qituvchiga murojaat qiling.
+            </p>
+          )}
+          <button onClick={handleSubmit} disabled={questions.length === 0}>
+            Testni Yuborish
+          </button>
         </>
       ) : (
         isEmailSet && (
           <div className="result">
-            <h3>Your Score: {score}%</h3>
-            {score >= 80 ? (
-              <button onClick={generateCertificate}>
-                Download Certificate
-              </button>
+            <h3>Sizning natijangiz: {score}%</h3>
+            {isFinalTest ? (
+              score >= 80 ? (
+                <button onClick={generateCertificate}>
+                  Sertifikatni Yuklab Olish
+                </button>
+              ) : (
+                <p>
+                  Sertifikat olish uchun kamida 80% ball to‘plashingiz kerak.
+                  Qayta urinib ko‘ring!
+                </p>
+              )
             ) : (
               <p>
-                You need at least 80% to download the certificate. Please try
-                again!
+                {score >= 60
+                  ? "Tabriklaymiz! Dars testidan o‘tdingiz."
+                  : "Afsus! Dars testidan o‘ta olmadingiz. Qayta urinib ko‘ring."}
               </p>
             )}
           </div>
@@ -222,6 +230,10 @@ const StyledTest = styled.div`
     transition: background 0.3s ease;
     &:hover {
       background: #1a9cbf;
+    }
+    &:disabled {
+      background: #ccc;
+      cursor: not-allowed;
     }
   }
   .result {

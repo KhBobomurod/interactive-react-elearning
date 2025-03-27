@@ -1,11 +1,11 @@
-// src/pages/Contact.js
+// src/pages/ContactUs.js
 import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { pageAnimation, fade, titleAnim } from "../animation";
 import emailjs from "@emailjs/browser"; // EmailJS’ni import qilamiz
 
-const Contact = () => {
+const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,6 +32,15 @@ const Contact = () => {
     setError("");
     setSuccess("");
 
+    // Xabarni localStorage’ga saqlash uchun tayyorlash
+    const newMessage = {
+      id: Date.now(), // Unikal ID
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      date: new Date().toLocaleString(), // Yuborilgan vaqt
+    };
+
     // EmailJS orqali xabar yuborish
     emailjs
       .send(
@@ -46,6 +55,19 @@ const Contact = () => {
       )
       .then(
         (result) => {
+          // Muvaffaqiyatli yuborilganda localStorage’ga saqlash
+          try {
+            const storedMessages =
+              JSON.parse(localStorage.getItem("contactMessages")) || [];
+            const updatedMessages = [...storedMessages, newMessage];
+            localStorage.setItem(
+              "contactMessages",
+              JSON.stringify(updatedMessages)
+            );
+          } catch (error) {
+            console.error("Xabarni saqlashda xato:", error);
+          }
+
           setSuccess("Xabar muvaffaqiyatli yuborildi!");
           setFormData({ name: "", email: "", message: "" });
           setLoading(false);
@@ -361,4 +383,4 @@ const mediaQueries = `
 
 Form.style = mediaQueries;
 
-export default Contact;
+export default ContactUs;

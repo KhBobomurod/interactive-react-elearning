@@ -15,7 +15,12 @@ const AdminPanel = () => {
     try {
       const storedMessages = localStorage.getItem("contactMessages");
       if (storedMessages) {
-        setMessages(JSON.parse(storedMessages));
+        const parsedMessages = JSON.parse(storedMessages);
+        // Xabarlarni sanasi bo‘yicha tartiblash (eng yangi birinchi)
+        const sortedMessages = parsedMessages.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setMessages(sortedMessages);
       }
     } catch (error) {
       console.error("Xabarlarni o‘qishda xato:", error);
@@ -51,8 +56,12 @@ const AdminPanel = () => {
     const updatedMessages = messages.map((msg) =>
       msg.id === editMessage.id ? editMessage : msg
     );
-    setMessages(updatedMessages);
-    localStorage.setItem("contactMessages", JSON.stringify(updatedMessages));
+    // Tartiblashni saqlab qolish uchun
+    const sortedMessages = updatedMessages.sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+    setMessages(sortedMessages);
+    localStorage.setItem("contactMessages", JSON.stringify(sortedMessages));
     setEditMessage(null);
   };
 
@@ -228,6 +237,14 @@ const LoginForm = styled.form`
     align-self: center;
     padding: 0.8rem 2rem;
     font-size: 1.1rem;
+    background: #30bee1;
+    border: none;
+    border-radius: 0.5rem;
+    color: #fff;
+    cursor: pointer;
+    &:hover {
+      background: #1a9cbf;
+    }
   }
 `;
 

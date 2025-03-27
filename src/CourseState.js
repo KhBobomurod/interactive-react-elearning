@@ -3,8 +3,11 @@ import react from "./img/react1.jpg";
 import react2 from "./img/react2jpg.jpg";
 import js from "./img/js.png";
 import js2 from "./img/js2.jpg";
-import node from "./img/node.png";
-import node2 from "./img/node2.jpg";
+import flutter from "./img/flutter.jpg";
+import blockchain from "./img/blockchain.jpg";
+import python from "./img/data-science.jpg";
+import uiux from "./img/uiux.jpg";
+import cybersecurity from "./img/cybersecurity.jpg";
 
 export const CourseState = [
   // 1. Interaktiv React va Redux
@@ -353,20 +356,238 @@ export const CourseState = [
     ],
   },
 
-  // 3. Node.js va Backend Dasturlash
+  // 3. Data Science with Python
   {
-    title: "Node.js va Backend",
-    mainImg: node,
-    url: "/courses/nodejs",
-    secondaryImg: node2,
+    title: "Data Science with Python",
+    mainImg: python,
+    url: "/courses/data-science-python",
+    secondaryImg: python,
     overview: {
       description:
-        "Bu kursda Node.js yordamida backend dasturlashni o‘rganasiz. Server yaratish, API qurish va ma’lumotlar bazasi bilan ishlashni o‘rganamiz.",
+        "Python yordamida ma’lumotlarni tahlil qilish, vizualizatsiya qilish va machine learning modellarini yaratishni o‘rganing.",
+      totalDuration: "7 soat",
+      level: "Boshlang‘ich va o‘rta daraja",
+      targetAudience: "Ma’lumotlar tahlilchilari va AI/ML bilan qiziqqanlar",
+      prerequisites: "Python asoslari",
+    },
+    awards: [
+      {
+        title: "Standart Paket",
+        description: "Kurs videolari va vazifalarga kirish imkoniyati.",
+        definition: "Standart",
+        price: "$169",
+      },
+      {
+        title: "Premium Paket",
+        description: "Videolar, vazifalar va mentor bilan 1:1 sessiyalar.",
+        definition: "Premium",
+        price: "$259",
+      },
+      {
+        title: "VIP Paket",
+        description:
+          "Barcha imkoniyatlar + loyiha bo‘yicha qo‘llab-quvvatlash.",
+        definition: "VIP",
+        price: "$429",
+      },
+    ],
+    lessons: [
+      {
+        id: 1,
+        title: "Python bilan tanishuv",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=rfscVS0vtbw",
+        text: "Data Science uchun Python asoslari.",
+        tasks: [
+          {
+            type: "task",
+            content: "Oddiy Python skriptini yozing.",
+          },
+        ],
+        duration: "30 daqiqa",
+      },
+      {
+        id: 2,
+        title: "Pandas bilan ma’lumot tahlili",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=vmEHCJofslg",
+        text: "Pandas kutubxonasi bilan ishlash.",
+        tasks: [
+          {
+            type: "task",
+            content: "CSV fayldan ma’lumot o‘qing va tahlil qiling.",
+          },
+        ],
+        duration: "40 daqiqa",
+      },
+      {
+        id: 3,
+        title: "Ma’lumotlar vizualizatsiyasi",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=a9UrKTVEeZA",
+        text: "Matplotlib va Seaborn bilan grafiklar.",
+        tasks: [
+          {
+            type: "task",
+            content: "Sodda grafik chizing.",
+          },
+        ],
+        duration: "45 daqiqa",
+      },
+      {
+        id: 4,
+        title: "Machine Learning asoslari",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=GwZoGJyTTR4",
+        text: "Scikit-learn bilan ML modellari.",
+        tasks: [
+          {
+            type: "task",
+            content: "Oddiy regressiya modelini yarating.",
+          },
+        ],
+        duration: "50 daqiqa",
+      },
+      {
+        id: 5,
+        title: "Loyiha: Ma’lumot tahlili",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=0xWf7cPWRg",
+        text: "Real loyiha orqali bilimlarni mustahkamlash.",
+        tasks: [
+          {
+            type: "task",
+            content: "Ma’lumotlarni tahlil qilib, bashorat qiling.",
+          },
+        ],
+        duration: "60 daqiqa",
+      },
+    ],
+  },
+
+  // 4. UI/UX Design Fundamentals
+  {
+    title: "UI/UX Design Fundamentals",
+    mainImg: uiux,
+    url: "/courses/uiux",
+    secondaryImg: uiux,
+    overview: {
+      description:
+        "Foydalanuvchi interfeysi va tajribasini loyihalash asoslarini o‘rganing. Figma va Adobe XD kabi vositalardan foydalanishni o‘z ichiga oladi.",
+      totalDuration: "4 soat 30 daqiqa",
+      level: "Boshlang‘ich daraja",
+      targetAudience: "Dizaynerlar va mahsulot ishlab chiqaruvchilar",
+      prerequisites: "Hech qanday bilim talab qilinmaydi",
+    },
+    awards: [
+      {
+        title: "Standart Paket",
+        description: "Kurs videolari va vazifalarga kirish imkoniyati.",
+        definition: "Standart",
+        price: "$119",
+      },
+      {
+        title: "Premium Paket",
+        description: "Videolar, vazifalar va mentor bilan 1:1 sessiyalar.",
+        definition: "Premium",
+        price: "$189",
+      },
+      {
+        title: "VIP Paket",
+        description:
+          "Barcha imkoniyatlar + loyiha bo‘yicha qo‘llab-quvvatlash.",
+        definition: "VIP",
+        price: "$279",
+      },
+    ],
+    lessons: [
+      {
+        id: 1,
+        title: "UI/UX asoslari",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=0e0pqUNtWno",
+        text: "UI va UX o‘rtasidagi farqlar.",
+        tasks: [
+          {
+            type: "task",
+            content: "Oddiy interfeys eskizini chizing.",
+          },
+        ],
+        duration: "20 daqiqa",
+      },
+      {
+        id: 2,
+        title: "Figma bilan ishlash",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=FTFaQWZB6aA",
+        text: "Figma vositasida dizayn yaratish.",
+        tasks: [
+          {
+            type: "task",
+            content: "Figma’da sodda sahifa dizaynini yarating.",
+          },
+        ],
+        duration: "30 daqiqa",
+      },
+      {
+        id: 3,
+        title: "Adobe XD asoslari",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=9xMgv5RCEtQ",
+        text: "Adobe XD bilan interaktiv prototiplar.",
+        tasks: [
+          {
+            type: "task",
+            content: "Adobe XD’da navigatsiya prototipini yarating.",
+          },
+        ],
+        duration: "35 daqiqa",
+      },
+      {
+        id: 4,
+        title: "Foydalanuvchi tajribasi",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=5X8XGYsYKLg",
+        text: "UX tadqiqotlari va testlari.",
+        tasks: [
+          {
+            type: "question",
+            content: "UX tadqiqotining asosiy maqsadi nima?",
+            answer: "Foydalanuvchi ehtiyojlarini aniqlash",
+          },
+        ],
+        duration: "40 daqiqa",
+      },
+      {
+        id: 5,
+        title: "Loyiha: Mobil ilova dizayni",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=zvQSKDDSB1M",
+        text: "Mobil ilova uchun UI/UX dizaynini yarating.",
+        tasks: [
+          {
+            type: "task",
+            content: "Mobil ilova uchun dizayn loyihasini tayyorlang.",
+          },
+        ],
+        duration: "45 daqiqa",
+      },
+    ],
+  },
+
+  // 5. Cybersecurity Basics
+  {
+    title: "Cybersecurity Basics",
+    mainImg: cybersecurity,
+    url: "/courses/cybersecurity",
+    secondaryImg: cybersecurity,
+    overview: {
+      description:
+        "Kiberxavfsizlik asoslarini o‘rganing: tarmoq xavfsizligi, shifrlash va hujumlardan himoyalanish usullari.",
       totalDuration: "5 soat",
-      level: "O‘rta daraja",
-      targetAudience:
-        "Backend dasturlashni o‘rganmoqchi bo‘lganlar, Node.js bilan tanishmoqchi bo‘lganlar",
-      prerequisites: "JavaScript asoslari",
+      level: "Boshlang‘ich daraja",
+      targetAudience: "IT mutaxassislari va xavfsizlik bilan qiziqqanlar",
+      prerequisites: "Kompyuter asoslari",
     },
     awards: [
       {
@@ -392,93 +613,294 @@ export const CourseState = [
     lessons: [
       {
         id: 1,
-        title: "Node.js bilan tanishuv",
+        title: "Kiberxavfsizlikka kirish",
         type: "video",
-        video: "https://www.youtube.com/watch?v=TlB_eWDSMt4",
-        text: "Node.js - bu JavaScriptni server tomonida ishlatish imkonini beruvchi muhit. Bu darsda Node.js bilan tanishamiz.",
+        video: "https://www.youtube.com/watch?v=INg6kJ6YQ7w",
+        text: "Kiberxavfsizlik nima va nima uchun muhim?",
         tasks: [
           {
-            type: "task",
-            content:
-              "Node.js yordamida oddiy server yarating va 'Salom, Node.js!' xabarini chiqaring.",
+            type: "question",
+            content: "Kiberxavfsizlikning asosiy maqsadi nima?",
+            answer: "Ma’lumotlarni himoyalash",
           },
         ],
-        duration: "20 daqiqa",
+        duration: "25 daqiqa",
       },
       {
         id: 2,
-        title: "Express.js bilan ishlash",
+        title: "Tarmoq xavfsizligi",
         type: "video",
-        video: "https://www.youtube.com/watch?v=SccSCuHhOw0",
-        text: "Express.js yordamida server yaratish va oddiy API qurishni o‘rganamiz.",
+        video: "https://www.youtube.com/watch?v=8pO8S6MgmQ0",
+        text: "Tarmoqlarni himoyalash usullari.",
         tasks: [
           {
             type: "task",
-            content:
-              "Express.js yordamida GET so‘roviga javob qaytaradigan oddiy API yarating.",
+            content: "Oddiy tarmoq konfiguratsiyasini tahlil qiling.",
           },
         ],
-        duration: "30 daqiqa",
+        duration: "35 daqiqa",
       },
       {
         id: 3,
-        title: "Ma’lumotlar bazasi bilan ishlash (MongoDB)",
+        title: "Shifrlash asoslari",
         type: "video",
-        video: "https://www.youtube.com/watch?v=ofme2o29ngU",
-        text: "MongoDB bilan ulanish va ma’lumotlarni saqlashni o‘rganamiz.",
+        video: "https://www.youtube.com/watch?v=AQDCe585Lfc",
+        text: "Ma’lumotlarni shifrlash qanday ishlaydi?",
         tasks: [
           {
             type: "task",
-            content:
-              "MongoDB’ga ulaning va oddiy foydalanuvchi ma’lumotlarini saqlang.",
+            content: "Oddiy shifrlash algoritmini sinab ko‘ring.",
           },
         ],
         duration: "40 daqiqa",
       },
       {
         id: 4,
-        title: "REST API qurish",
+        title: "Hujumlardan himoyalanish",
         type: "video",
-        video: "https://www.youtube.com/watch?v=pKd0Rpw7OGE",
-        text: "REST API qurish va CRUD operatsiyalarini amalga oshirishni o‘rganamiz.",
+        video: "https://www.youtube.com/watch?v=0S2oNxW5oZA",
+        text: "Umumiy kiberhujum turlari va ulardan himoyalanish.",
+        tasks: [
+          {
+            type: "question",
+            content: "Phishing hujumi nima?",
+            answer: "Foydalanuvchilarni aldash orqali ma’lumot olish",
+          },
+        ],
+        duration: "45 daqiqa",
+      },
+      {
+        id: 5,
+        title: "Loyiha: Xavfsizlik auditi",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=zvQSKDDSB1M",
+        text: "Oddiy tizim uchun xavfsizlik auditi.",
         tasks: [
           {
             type: "task",
-            content:
-              "Foydalanuvchilar uchun CRUD (Create, Read, Update, Delete) operatsiyalarini amalga oshiradigan API yarating.",
+            content: "Tizimning zaif joylarini aniqlang.",
           },
         ],
         duration: "50 daqiqa",
       },
+    ],
+  },
+
+  // 6. Mobile App Development with Flutter
+  {
+    title: "Mobile App Development with Flutter",
+    mainImg: flutter,
+    url: "/courses/flutter",
+    secondaryImg: flutter,
+    overview: {
+      description:
+        "Flutter yordamida iOS va Android uchun mobil ilovalarni yaratishni o‘rganing.",
+      totalDuration: "6 soat",
+      level: "Boshlang‘ich va o‘rta daraja",
+      targetAudience: "Mobil dasturchilar va startaplar",
+      prerequisites: "Dart yoki boshqa dasturlash tili asoslari",
+    },
+    awards: [
       {
-        id: 5,
-        title: "Autentifikatsiya va avtorizatsiya",
+        title: "Standart Paket",
+        description: "Kurs videolari va vazifalarga kirish imkoniyati.",
+        definition: "Standart",
+        price: "$149",
+      },
+      {
+        title: "Premium Paket",
+        description: "Videolar, vazifalar va mentor bilan 1:1 sessiyalar.",
+        definition: "Premium",
+        price: "$229",
+      },
+      {
+        title: "VIP Paket",
+        description:
+          "Barcha imkoniyatlar + loyiha bo‘yicha qo‘llab-quvvatlash.",
+        definition: "VIP",
+        price: "$349",
+      },
+    ],
+    lessons: [
+      {
+        id: 1,
+        title: "Flutter bilan tanishuv",
         type: "video",
-        video: "https://www.youtube.com/watch?v=7nafaH9SddU",
-        text: "JWT yordamida autentifikatsiya va avtorizatsiyani qanday qo‘llashni o‘rganamiz.",
+        video: "https://www.youtube.com/watch?v=fq4N0hgOWzU",
+        text: "Flutter nima va qanday ishlaydi?",
         tasks: [
           {
             type: "task",
-            content:
-              "JWT yordamida foydalanuvchi login qilish tizimini yarating.",
+            content: "Flutter loyihasini sozlang.",
+          },
+        ],
+        duration: "25 daqiqa",
+      },
+      {
+        id: 2,
+        title: "Dart asoslari",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=EPs6YNKqG8g",
+        text: "Flutter uchun Dart tili bilan tanishuv.",
+        tasks: [
+          {
+            type: "task",
+            content: "Oddiy Dart funksiyasini yozing.",
+          },
+        ],
+        duration: "30 daqiqa",
+      },
+      {
+        id: 3,
+        title: "UI dizayn Flutter’da",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=1ukSR1GRtMU",
+        text: "Flutter’da interfeys yaratish.",
+        tasks: [
+          {
+            type: "task",
+            content: "Sodda mobil sahifa dizaynini yarating.",
           },
         ],
         duration: "40 daqiqa",
       },
       {
-        id: 6,
-        title: "Kichik loyiha: Blog API",
+        id: 4,
+        title: "State boshqaruvi",
         type: "video",
-        video: "https://www.youtube.com/watch?v=K5yccpCoa4I",
-        text: "Node.js, Express.js va MongoDB yordamida blog API loyihasini yaratamiz.",
+        video: "https://www.youtube.com/watch?v=zK2ZQpDgbYk",
+        text: "Flutter’da holatni boshqarish.",
         tasks: [
           {
             type: "task",
-            content:
-              "Postlarni yaratish, o‘qish, yangilash va o‘chirish imkoniyati bo‘lgan blog API yarating.",
+            content: "Hisoblagich ilovasini yarating.",
           },
         ],
-        duration: "60 daqiqa",
+        duration: "45 daqiqa",
+      },
+      {
+        id: 5,
+        title: "Loyiha: Todo ilovasi",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=E8jIudo4zX8",
+        text: "Flutter’da Todo ilovasini yarating.",
+        tasks: [
+          {
+            type: "task",
+            content: "Vazifalar qo‘shish va o‘chirish imkoniyati qo‘shing.",
+          },
+        ],
+        duration: "50 daqiqa",
+      },
+    ],
+  },
+
+  // 7. Blockchain & Cryptocurrency Basics
+  {
+    title: "Blockchain & Cryptocurrency Basics",
+    mainImg: blockchain,
+    url: "/courses/blockchain",
+    secondaryImg: blockchain,
+    overview: {
+      description:
+        "Blockchain texnologiyasi va kriptovalyutalar asoslarini o‘rganing. Smart kontraktlar va Ethereum bilan ishlashni o‘z ichiga oladi.",
+      totalDuration: "5 soat 30 daqiqa",
+      level: "Boshlang‘ich va o‘rta daraja",
+      targetAudience: "Texnologiya va moliya sohasida qiziqqanlar",
+      prerequisites: "Dasturlash asoslari (ixtiyoriy)",
+    },
+    awards: [
+      {
+        title: "Standart Paket",
+        description: "Kurs videolari va vazifalarga kirish imkoniyati.",
+        definition: "Standart",
+        price: "$159",
+      },
+      {
+        title: "Premium Paket",
+        description: "Videolar, vazifalar va mentor bilan 1:1 sessiyalar.",
+        definition: "Premium",
+        price: "$239",
+      },
+      {
+        title: "VIP Paket",
+        description:
+          "Barcha imkoniyatlar + loyiha bo‘yicha qo‘llab-quvvatlash.",
+        definition: "VIP",
+        price: "$369",
+      },
+    ],
+    lessons: [
+      {
+        id: 1,
+        title: "Blockchain asoslari",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=SSo_EIwHSd4",
+        text: "Blockchain nima va u qanday ishlaydi?",
+        tasks: [
+          {
+            type: "question",
+            content: "Blockchainning asosiy xususiyati nima?",
+            answer: "Markazlashmaganlik",
+          },
+        ],
+        duration: "25 daqiqa",
+      },
+      {
+        id: 2,
+        title: "Kriptovalyutalar",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=Um63OQz3bjo",
+        text: "Bitcoin va boshqa kriptovalyutalar haqida.",
+        tasks: [
+          {
+            type: "task",
+            content: "Bitcoin tranzaksiyasini tahlil qiling.",
+          },
+        ],
+        duration: "35 daqiqa",
+      },
+      {
+        id: 3,
+        title: "Ethereum va Smart kontraktlar",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=ZE2HxTmxfrI",
+        text: "Smart kontraktlar bilan ishlash.",
+        tasks: [
+          {
+            type: "task",
+            content: "Oddiy smart kontrakt yozing.",
+          },
+        ],
+        duration: "40 daqiqa",
+      },
+      {
+        id: 4,
+        title: "DApp yaratish",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=coQ5dg8wM2o",
+        text: "Decentralized ilovalar bilan tanishuv.",
+        tasks: [
+          {
+            type: "task",
+            content: "Sodda DApp loyihasini yarating.",
+          },
+        ],
+        duration: "45 daqiqa",
+      },
+      {
+        id: 5,
+        title: "Loyiha: Token yaratish",
+        type: "video",
+        video: "https://www.youtube.com/watch?v=XdKbZpwL2ks",
+        text: "Ethereum’da o‘z tokeningizni yarating.",
+        tasks: [
+          {
+            type: "task",
+            content: "ERC-20 tokenini yarating.",
+          },
+        ],
+        duration: "50 daqiqa",
       },
     ],
   },

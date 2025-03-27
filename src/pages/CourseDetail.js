@@ -10,6 +10,7 @@ import Editor from "@monaco-editor/react";
 import checkCode from "../utils/codeChecker";
 import { FaClock, FaLevelUpAlt, FaUsers, FaBook } from "react-icons/fa";
 import CourseTest from "../components/CourseTest";
+import { jsPDF } from "jspdf"; // Sertifikat uchun jsPDF import qilamiz
 
 const CourseDetail = () => {
   const history = useHistory();
@@ -21,13 +22,19 @@ const CourseDetail = () => {
   const [showTest, setShowTest] = useState(false); // Dars testini ko‘rsatish
   const [showFinalTest, setShowFinalTest] = useState(false); // Umumiy testni ko‘rsatish
   const [lessonTestScores, setLessonTestScores] = useState({}); // Dars testlari natijalari
+  const [finalTestScore, setFinalTestScore] = useState(null); // Umumiy test natijasi
+  const [isCourseCompleted, setIsCourseCompleted] = useState(false); // Kurs yakunlanganligi
   const dispatch = useDispatch();
   const completedLessons = useSelector((state) => state.completedLessons);
+
+  // Foydalanuvchi ismini Redux store’dan olish (agar mavjud bo‘lsa)
+  const userName = useSelector((state) => state.user?.name) || "Foydalanuvchi";
 
   useEffect(() => {
     const currentCourse = courses.find(
       (stateCourse) => stateCourse.url === url
     );
+    console.log("course.url:", currentCourse?.url); // Bu /react bo‘lishi kerak
     setCourse(currentCourse || null);
   }, [courses, url]);
 
@@ -42,9 +49,19 @@ const CourseDetail = () => {
 
   // Umumiy testni tugatish
   const handleFinalTestComplete = (score) => {
-    if (score >= 80) {
-      // Umumiy testdan o‘tgan bo‘lsa, sertifikat olish imkoniyati ochiladi
-      setShowFinalTest(false);
+    setFinalTestScore(score);
+    setShowFinalTest(false);
+
+    // Barcha dars testlari va umumiy test natijalarini tekshirish
+    const allLessonsPassed = course?.lessons.every(
+      (lesson) => lessonTestScores[lesson.id] >= 60
+    );
+    const finalTestPassed = score >= 80;
+
+    if (allLessonsPassed && finalTestPassed) {
+      setIsCourseCompleted(true);
+      // Sertifikatni avtomatik yuklash
+      generateCertificate(userName);
     }
   };
 
@@ -86,6 +103,30 @@ const CourseDetail = () => {
     setShowFinalTest(true);
   };
 
+  // Sertifikat generatsiyasi
+  const generateCertificate = (userName) => {
+    try {
+      const doc = new jsPDF();
+      doc.setFontSize(20);
+      doc.text("Sertifikat", 105, 20, { align: "center" });
+      doc.setFontSize(16);
+      doc.text(`Bu sertifikat ${userName} ga berildi`, 105, 40, {
+        align: "center",
+      });
+      doc.text(`Kurs: ${course.title}`, 105, 60, { align: "center" });
+      doc.text(`Natija: ${finalTestScore}%`, 105, 80, { align: "center" });
+      doc.text(`Sana: ${new Date().toLocaleDateString()}`, 105, 100, {
+        align: "center",
+      });
+      doc.save(`${course.title}_Sertifikat.pdf`);
+    } catch (error) {
+      console.error("Sertifikat yuklashda xato:", error);
+      alert(
+        "Sertifikat yuklashda xato yuz berdi. Iltimos, qayta urinib ko‘ring."
+      );
+    }
+  };
+
   return (
     <>
       {course && (
@@ -101,7 +142,7 @@ const CourseDetail = () => {
           </Header>
 
           {/* Kurs haqida ma’lumot bo‘limi */}
-          {!showLessons && (
+          {!showLessons && !isCourseCompleted && (
             <CourseOverview
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -152,7 +193,7 @@ const CourseDetail = () => {
           )}
 
           {/* Darslar bo‘limi */}
-          {showLessons && !showFinalTest && (
+          {showLessons && !showFinalTest && !isCourseCompleted && (
             <>
               <Lessons
                 initial={{ opacity: 0, y: 50 }}
@@ -229,7 +270,7 @@ const CourseDetail = () => {
           )}
 
           {/* Umumiy test bo‘limi */}
-          {showFinalTest && (
+          {showFinalTest && !isCourseCompleted && (
             <Lessons
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -243,6 +284,23 @@ const CourseDetail = () => {
                 onFinalTestComplete={handleFinalTestComplete}
               />
             </Lessons>
+          )}
+
+          {/* Kurs yakunlangan bo‘limi */}
+          {isCourseCompleted && (
+            <CertificateSection
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3>Tabriklaymiz! Kursni muvaffaqiyatli yakunladingiz!</h3>
+              <p>
+                Siz barcha dars testlaridan va umumiy testdan muvaffaqiyatli
+                o‘tdingiz.
+              </p>
+              <p>Umumiy test natijangiz: {finalTestScore}%</p>
+              <p>Sertifikatingiz avtomatik yuklandi!</p>
+            </CertificateSection>
           )}
         </Details>
       )}
@@ -875,6 +933,47 @@ const ImageDisplay = styled.div`
   @media (max-width: 480px) {
     img {
       height: 30vh;
+    }
+  }
+`;
+
+const CertificateSection = styled(motion.div)`
+  padding: 3rem 5rem;
+  text-align: center;
+  h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #30bee1;
+  }
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 1300px) {
+    padding: 2rem 3rem;
+    h3 {
+      font-size: 1.8rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+  }
+  @media (max-width: 768px) {
+    padding: 1.5rem 2rem;
+    h3 {
+      font-size: 1.6rem;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+  }
+  @media (max-width: 480px) {
+    padding: 1rem 1rem;
+    h3 {
+      font-size: 1.4rem;
+    }
+    p {
+      font-size: 0.85rem;
     }
   }
 `;

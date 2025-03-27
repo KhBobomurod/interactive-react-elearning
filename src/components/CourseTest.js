@@ -1,7 +1,6 @@
 // src/components/CourseTest.js
 import React, { useState } from "react";
 import styled from "styled-components";
-import { jsPDF } from "jspdf";
 
 // Har bir kurs va dars uchun savollar
 const lessonQuestions = {
@@ -799,16 +798,21 @@ const CourseTest = ({
   onCompleteLessonTest,
   onFinalTestComplete,
 }) => {
+  // courseId va lessonId ni tekshirish uchun konsolga chiqaramiz
+  console.log("CourseTest props:", { courseId, lessonId, isFinalTest });
+
   // Dars yoki umumiy test savollarini tanlash
   const questions = isFinalTest
     ? finalTestQuestions[courseId] || []
     : lessonQuestions[courseId]?.[lessonId] || [];
 
+  // Savollar topilgan-topilmaganligini tekshirish
+  console.log("Selected questions:", questions);
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
   const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
-  const [userName, setUserName] = useState(""); // Sertifikat uchun foydalanuvchi ismi
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
@@ -839,36 +843,13 @@ const CourseTest = ({
     }
   };
 
-  const generateCertificate = () => {
-    if (!userName) {
-      alert("Iltimos, ismingizni kiriting!");
-      return;
-    }
-
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Sertifikat", 105, 20, { align: "center" });
-    doc.setFontSize(16);
-    doc.text(`Bu sertifikat ${userName} ga berildi`, 105, 40, {
-      align: "center",
-    });
-    doc.text(`Kurs: ${courseTitle}`, 105, 60, { align: "center" });
-    doc.text(
-      `Natija: ${Math.round((score / questions.length) * 100)}%`,
-      105,
-      80,
-      {
-        align: "center",
-      }
-    );
-    doc.text(`Sana: ${new Date().toLocaleDateString()}`, 105, 100, {
-      align: "center",
-    });
-    doc.save(`${courseTitle}_Sertifikat.pdf`);
-  };
-
   if (questions.length === 0) {
-    return <TestContainer>Test uchun savollar topilmadi!</TestContainer>;
+    return (
+      <TestContainer>
+        Test uchun savollar topilmadi! courseId: {courseId}, lessonId:{" "}
+        {lessonId}
+      </TestContainer>
+    );
   }
 
   return (
@@ -881,18 +862,6 @@ const CourseTest = ({
             berdingiz.
           </p>
           <p>Umumiy foiz: {Math.round((score / questions.length) * 100)}%</p>
-          {isFinalTest && score / questions.length >= 0.8 && (
-            <>
-              <h4>Sertifikat olish</h4>
-              <input
-                type="text"
-                placeholder="Ismingizni kiriting"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-              />
-              <button onClick={generateCertificate}>Sertifikat Yuklash</button>
-            </>
-          )}
         </Results>
       ) : (
         <Question>
@@ -1032,41 +1001,28 @@ const Options = styled.div`
 
 const Results = styled.div`
   text-align: center;
-  input {
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    width: 100%;
-    max-width: 300px;
-    font-size: 1rem;
-    border-radius: 0.3rem;
-    border: none;
-  }
-  h4 {
-    font-size: 1.4rem;
-    margin: 1rem 0;
-  }
   @media (max-width: 1300px) {
-    input {
-      font-size: 0.9rem;
+    h3 {
+      font-size: 1.6rem;
     }
-    h4 {
-      font-size: 1.3rem;
+    p {
+      font-size: 1rem;
     }
   }
   @media (max-width: 768px) {
-    input {
-      font-size: 0.85rem;
+    h3 {
+      font-size: 1.4rem;
     }
-    h4 {
-      font-size: 1.2rem;
+    p {
+      font-size: 0.9rem;
     }
   }
   @media (max-width: 480px) {
-    input {
-      font-size: 0.8rem;
+    h3 {
+      font-size: 1.2rem;
     }
-    h4 {
-      font-size: 1.1rem;
+    p {
+      font-size: 0.85rem;
     }
   }
 `;

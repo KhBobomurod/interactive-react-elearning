@@ -14,7 +14,7 @@ export const CourseState = [
   {
     title: "React va Redux",
     mainImg: react,
-    url: "/courses/react",
+    url: "/react", // "/courses/react" dan "/react" ga o‘zgartirildi
     secondaryImg: react2,
     overview: {
       description:
@@ -209,7 +209,7 @@ export const CourseState = [
   {
     title: "JavaScript Asoslari",
     mainImg: js,
-    url: "/courses/javascript",
+    url: "/javascript", // "/courses/javascript" dan "/javascript" ga o‘zgartirildi
     secondaryImg: js2,
     overview: {
       description:
@@ -360,7 +360,7 @@ export const CourseState = [
   {
     title: "Data Science with Python",
     mainImg: python,
-    url: "/courses/data-science-python",
+    url: "/data-science", // "/courses/data-science-python" dan "/data-science" ga o‘zgartirildi
     secondaryImg: python,
     overview: {
       description:
@@ -469,7 +469,7 @@ export const CourseState = [
   {
     title: "UI/UX Design Fundamentals",
     mainImg: uiux,
-    url: "/courses/uiux",
+    url: "/ui-ux", // "/courses/uiux" dan "/ui-ux" ga o‘zgartirildi
     secondaryImg: uiux,
     overview: {
       description:
@@ -579,7 +579,7 @@ export const CourseState = [
   {
     title: "Cybersecurity Basics",
     mainImg: cybersecurity,
-    url: "/courses/cybersecurity",
+    url: "/cybersecurity", // "/courses/cybersecurity" dan "/cybersecurity" ga o‘zgartirildi
     secondaryImg: cybersecurity,
     overview: {
       description:
@@ -690,7 +690,7 @@ export const CourseState = [
   {
     title: "Mobile App Development with Flutter",
     mainImg: flutter,
-    url: "/courses/flutter",
+    url: "/flutter", // "/courses/flutter" dan "/flutter" ga o‘zgartirildi
     secondaryImg: flutter,
     overview: {
       description:
@@ -799,7 +799,7 @@ export const CourseState = [
   {
     title: "Blockchain & Cryptocurrency Basics",
     mainImg: blockchain,
-    url: "/courses/blockchain",
+    url: "/blockchain", // "/courses/blockchain" dan "/blockchain" ga o‘zgartirildi
     secondaryImg: blockchain,
     overview: {
       description:

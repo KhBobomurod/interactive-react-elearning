@@ -12,10 +12,15 @@ import AdminPanel from "./pages/AdminPanel"; // Admin panelni import qilamiz
 import { Switch, Route, useLocation } from "react-router-dom";
 // framer motion
 import { AnimatePresence } from "framer-motion";
+// CourseState import qilamiz
+import { CourseState } from "./CourseState";
 
 function App() {
   const location = useLocation();
-  // console.log(location);
+
+  // Kurslar ro‘yxatini CourseState dan olamiz
+  const courses = CourseState;
+
   return (
     <div className="App">
       <GlobalStyle />
@@ -28,9 +33,12 @@ function App() {
           <Route path="/courses" exact>
             <Courses />
           </Route>
-          <Route path="/courses/:id">
-            <CourseDetail />
-          </Route>
+          {/* Har bir kurs uchun dinamik yo‘nalish qo‘shamiz */}
+          {courses.map((course) => (
+            <Route key={course.url} path={course.url} exact>
+              <CourseDetail />
+            </Route>
+          ))}
           <Route path="/contact">
             <ContactUs />
           </Route>

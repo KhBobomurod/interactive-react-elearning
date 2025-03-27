@@ -4,53 +4,71 @@ import { createStore } from "redux";
 // localStorage’dan boshlang‘ich holatni o‘qish
 const loadState = () => {
   try {
-    const serializedState = localStorage.getItem("completedLessons");
+    const serializedState = localStorage.getItem("state");
     if (serializedState === null) {
-      return { completedLessons: {} };
+      return {
+        completedLessons: {},
+        user: { name: "Foydalanuvchi" }, // Standart foydalanuvchi ismi
+      };
     }
-    return { completedLessons: JSON.parse(serializedState) };
+    return JSON.parse(serializedState);
   } catch (err) {
-    return { completedLessons: {} };
+    console.error("localStorage’dan o‘qishda xato:", err);
+    return {
+      completedLessons: {},
+      user: { name: "Foydalanuvchi" },
+    };
   }
 };
 
 // localStorage’ga saqlash
 const saveState = (state) => {
   try {
-    const serializedState = JSON.stringify(state.completedLessons);
-    localStorage.setItem("completedLessons", serializedState);
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem("state", serializedState);
   } catch (err) {
     console.error("localStorage’ga saqlashda xato:", err);
   }
 };
 
+// Boshlang‘ich holat
 const initialState = loadState();
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "COMPLETE_LESSON":
-      const newStateComplete = {
+      return {
         ...state,
         completedLessons: {
           ...state.completedLessons,
           [action.payload]: true,
         },
       };
-      saveState(newStateComplete); // Har o‘zgarishda saqlash
-      return newStateComplete;
     case "MARK_INCOMPLETE":
-      const newStateIncomplete = {
+      return {
         ...state,
         completedLessons: {
           ...state.completedLessons,
           [action.payload]: false,
         },
       };
-      saveState(newStateIncomplete); // Har o‘zgarishda saqlash
-      return newStateIncomplete;
+    case "SET_USER":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          name: action.payload.name,
+        },
+      };
     default:
       return state;
   }
 };
 
+// Store yaratish
 export const store = createStore(reducer);
+
+// Store o‘zgarishlarini kuzatib, localStorage’ga saqlash
+store.subscribe(() => {
+  saveState(store.getState());
+});

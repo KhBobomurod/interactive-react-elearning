@@ -166,11 +166,13 @@ const StyledNav = styled(motion.nav)`
   }
 `;
 
-const Hamburger = styled.div`
-  display: none; /* Dastlab yashirin */
+const Hamburger = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "isOpen",
+})`
+  display: none;
 
   @media (max-width: 768px) {
-    display: flex; /* 768px dan kichik ekranlarda ko‘rinadi */
+    display: flex;
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
@@ -186,7 +188,6 @@ const Hamburger = styled.div`
       transition: all 0.3s ease;
     }
 
-    /* Hamburger ochilganda X shakliga o‘tadi */
     ${({ isOpen }) =>
       isOpen &&
       `
